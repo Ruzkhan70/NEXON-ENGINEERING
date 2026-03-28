@@ -1,0 +1,15 @@
+const requireAuth = (req, res, next) => {
+  if (req.session && req.session.userId) {
+    return next();
+  }
+  return res.status(401).json({ error: 'Unauthorized' });
+};
+
+const requireAdmin = (req, res, next) => {
+  if (req.session && req.session.userId && req.session.role === 'admin') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Admin access required' });
+};
+
+module.exports = { requireAuth, requireAdmin };

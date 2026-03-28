@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Our Clients — NEXON Engineering Services</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            frost: "#E1F5FE",
+            navy: "#0A2463",
+            indigo: "#3E5C76",
+            royal: "#1E88E5",
+            pearl: "#F8F9FA",
+          }
+        }
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .nav-links a {
+      position: relative;
+      text-decoration: none;
+      color: #0A2463;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background-color: #1E88E5;
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after,
+    .nav-links a.text-royal::after {
+      width: 100%;
+    }
+    .nav-links a.text-royal {
+      color: #1E88E5;
+    }
+
+    .client-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .client-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #1E88E5, #00d4ff);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .client-card:hover::before {
+      transform: scaleX(1);
+    }
+    .client-card img {
+      transition: transform 0.5s ease;
+    }
+    .client-card:hover img {
+      transform: scale(1.1);
+    }
+    .client-card:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+  </style>
+</head>
+
+<body class="bg-pearl">
+
+  <!-- Scroll Progress -->
+  <div id="scroll-progress" class="scroll-progress" style="width: 0%"></div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-pearl/95 backdrop-blur-lg shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center group">
+        <div class="logo">
+          <img src="/images/logo-small.png" alt="Nexon" class="h-12 transition-transform group-hover:scale-105" />
+          <span class="company-name text-xs lg:text-lg text-navy font-semibold ml-2">
+            NEXON ENGINEERING SERVICES (PVT) LTD
+          </span>
+        </div>
+      </a>
+
+      <div class="hidden md:flex space-x-8 text-navy font-medium nav-links" id="dynamic-nav">
+        <a href="index.html" class="hover:text-royal">Home</a>
+        <a href="about.html" class="hover:text-royal">About</a>
+        <a href="services.html" class="hover:text-royal">Services</a>
+        <a href="projects.html" class="hover:text-royal">Projects</a>
+        <a href="our-clients.html" class="text-royal">Our Clients</a>
+        <a href="contact.html" class="hover:text-royal">Contact</a>
+      </div>
+
+      <a href="contact.html" class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-royal hover:bg-[#1976D2] text-pearl rounded-full text-sm font-medium transition-all hover:shadow-lg">
+        Get Quote
+      </a>
+
+      <button id="mobile-btn" class="md:hidden text-navy p-2">
+        <i data-feather="menu"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden bg-navy/95 backdrop-blur-lg text-pearl px-6 py-6 space-y-4 md:hidden border-t border-white/10">
+      <div id="dynamic-mobile-nav" class="space-y-2"></div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="pt-36 pb-12 bg-gradient-to-b from-frost to-pearl text-center relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10">
+      <div class="absolute top-10 right-20 w-72 h-72 bg-royal/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 left-20 w-64 h-64 bg-indigo/20 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative z-10">
+      <span class="inline-block px-4 py-1.5 bg-royal/10 text-royal rounded-full text-sm font-medium mb-4 fade-in-up">Partners</span>
+      <h1 class="text-4xl md:text-5xl font-bold text-navy mb-4 fade-in-up">Our Clients</h1>
+      <p class="text-indigo text-lg max-w-2xl mx-auto px-6 fade-in-up">Trusted by leading industries and businesses across Sri Lanka</p>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="bg-gradient-to-r from-navy to-indigo py-12">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="fade-in-up">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">50+</div>
+          <div class="text-frost/80 mt-1">Projects Completed</div>
+        </div>
+        <div class="fade-in-up delay-100">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">30+</div>
+          <div class="text-frost/80 mt-1">Industrial Clients</div>
+        </div>
+        <div class="fade-in-up delay-200">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">8+</div>
+          <div class="text-frost/80 mt-1">Years Experience</div>
+        </div>
+        <div class="fade-in-up delay-300">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">24/7</div>
+          <div class="text-frost/80 mt-1">Emergency Support</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENTS GRID -->
+  <section class="py-16 bg-gradient-to-b from-pearl to-frost">
+    <div class="container mx-auto px-6">
+
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-navy mb-4 fade-in-left flex items-center gap-3">
+          <span class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center">
+            <i data-feather="briefcase" class="w-5 h-5 text-pearl"></i>
+          </span>
+          Our Corporate Partners
+        </h2>
+        <p class="text-indigo/70 max-w-2xl fade-in-left">
+          We proudly work with a wide range of clients across industrial, commercial, and technological sectors — providing 
+          dependable engineering solutions with precision and passion.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+        
+        <div class="client-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500">
+          <div class="p-8 flex items-center justify-center h-40">
+            <img src="/images/client-1.png" class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+          </div>
+        </div>
+
+        <div class="client-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500">
+          <div class="p-8 flex items-center justify-center h-40">
+            <img src="/images/client-2.png" class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+          </div>
+        </div>
+
+        <div class="client-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500">
+          <div class="p-8 flex items-center justify-center h-40">
+            <img src="/images/client-3.png" class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+          </div>
+        </div>
+
+        <div class="client-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500">
+          <div class="p-8 flex items-center justify-center h-40">
+            <img src="/images/client-4.png" class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+          </div>
+        </div>
+
+        <div class="client-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500">
+          <div class="p-8 flex items-center justify-center h-40">
+            <img src="/images/client-5.png" class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+          </div>
+        </div>
+
+        <div class="client-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500">
+          <div class="p-8 flex items-center justify-center h-40">
+            <img src="/images/client-6.png" class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA Section -->
+      <div class="bg-gradient-to-r from-royal to-indigo rounded-3xl p-10 md:p-16 text-center relative overflow-hidden mt-16">
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 30px 30px;"></div>
+        <div class="relative z-10">
+          <h3 class="text-3xl font-bold text-pearl mb-4">Become Our Partner</h3>
+          <p class="text-pearl/80 text-lg mb-8 max-w-2xl mx-auto">Join our growing list of satisfied clients and experience quality engineering services.</p>
+          <a href="contact.html" class="inline-flex items-center gap-2 px-8 py-4 bg-pearl hover:bg-white text-navy rounded-full font-semibold transition-all hover:shadow-xl">
+            Get in Touch <i data-feather="arrow-right" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-navy text-pearl py-16">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      
+      <div>
+        <img src="/images/logo-large.png" class="h-16 mb-4 brightness-0 invert" alt="Nexon logo"/>
+        <p id="footerCompanyDescription" class="text-frost/80 leading-relaxed">
+          Nexon Engineering provides industrial repair, maintenance and automation solutions across residential, commercial and industrial projects.
+        </p>
+        <div class="flex gap-4 mt-6">
+          <a href="https://web.facebook.com/profile.php?id=61584696382140" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="facebook" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="linkedin" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="instagram" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
+        <ul class="space-y-3">
+          <li><a href="about.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> About Us</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Services</a></li>
+          <li><a href="projects.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Projects</a></li>
+          <li><a href="contact.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Services</h3>
+        <ul class="space-y-3">
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Machine Repair</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Electrical Wiring</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Automation</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Solar Installation</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Contact Us</h3>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <i data-feather="map-pin" class="w-5 h-5 text-royal mt-1 flex-shrink-0"></i>
+            <span class="text-frost/80">WVP9+FGX, Colombo 01000, Sri Lanka</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <i data-feather="mail" class="w-5 h-5 text-royal mt-1 flex-shrink-0"></i>
+            <a href="mailto:nexonengineering.service@gmail.com" class="text-frost/80 hover:text-royal transition-colors">nexonengineering.service@gmail.com</a>
+          </div>
+          <div class="flex gap-3">
+            <i data-feather="phone" class="w-5 h-5 text-royal flex-shrink-0"></i>
+            <a href="tel:+94773753621" class="text-frost/80 hover:text-royal transition-colors">+94 77 375 3621</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="footerCopyright" class="text-center text-frost/60 mt-12 pt-8 border-t border-white/10">
+      © 2025 NEXON Engineering Services (Pvt) Ltd. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="/navigation.js"></script>
+  <script src="scripts.js"></script>
+  <script>feather.replace();</script>
+
+</body>
+</html>

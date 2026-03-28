@@ -1,0 +1,10 @@
+[
+  {
+    "_id": "1",
+    "username": "admin",
+    "password": "$2a$10$F4sjcKq0SIfu1u0vV/Lm/.D0TYxmfkDC67CiQ5/wL0/MG5WzXETiO",
+    "role": "admin",
+    "email": "admin@nexon.lk",
+    "createdAt": "2026-03-28T12:55:42.965Z"
+  }
+]

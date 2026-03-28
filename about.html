@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About — NEXON Engineering Services</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            frost: "#E1F5FE",
+            navy: "#0A2463",
+            indigo: "#3E5C76",
+            royal: "#1E88E5",
+            pearl: "#F8F9FA",
+          }
+        }
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .nav-links a {
+      position: relative;
+      text-decoration: none;
+      color: #0A2463;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background-color: #1E88E5;
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after,
+    .nav-links a.text-royal::after {
+      width: 100%;
+    }
+    .nav-links a.text-royal {
+      color: #1E88E5;
+    }
+
+    .parallax-section {
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    .parallax-element {
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+    .about-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .about-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(30, 136, 229, 0.15);
+    }
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #1E88E5, #00d4ff);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .about-card:hover::before {
+      transform: scaleX(1);
+    }
+    .stat-card {
+      transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px) scale(1.02);
+    }
+  </style>
+</head>
+
+<body class="bg-pearl">
+
+  <!-- Scroll Progress -->
+  <div id="scroll-progress" class="scroll-progress" style="width: 0%"></div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-pearl/95 backdrop-blur-lg shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center group">
+        <div class="logo">
+          <img src="/images/logo-small.png" alt="Nexon" class="h-12 transition-transform group-hover:scale-105" />
+          <span class="company-name text-xs lg:text-lg text-navy font-semibold ml-2">
+            NEXON ENGINEERING SERVICES (PVT) LTD
+          </span>
+        </div>
+      </a>
+
+      <div class="hidden md:flex space-x-8 text-navy font-medium nav-links" id="dynamic-nav">
+        <a href="index.html" class="hover:text-royal">Home</a>
+        <a href="about.html" class="text-royal">About</a>
+        <a href="services.html" class="hover:text-royal">Services</a>
+        <a href="projects.html" class="hover:text-royal">Projects</a>
+        <a href="our-clients.html" class="hover:text-royal">Our Clients</a>
+        <a href="contact.html" class="hover:text-royal">Contact</a>
+      </div>
+
+      <a href="contact.html" class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-royal hover:bg-[#1976D2] text-pearl rounded-full text-sm font-medium transition-all hover:shadow-lg">
+        Get Quote
+      </a>
+
+      <button id="mobile-btn" class="md:hidden text-navy p-2">
+        <i data-feather="menu"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden bg-navy/95 backdrop-blur-lg text-pearl px-6 py-6 space-y-4 md:hidden border-t border-white/10">
+      <div id="dynamic-mobile-nav" class="space-y-2"></div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="pt-36 pb-12 bg-gradient-to-b from-frost to-pearl text-center relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10">
+      <div class="absolute top-10 right-20 w-72 h-72 bg-royal/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 left-20 w-64 h-64 bg-indigo/20 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative z-10">
+      <span class="inline-block px-4 py-1.5 bg-royal/10 text-royal rounded-full text-sm font-medium mb-4 fade-in-up">About Us</span>
+      <h1 class="text-4xl md:text-5xl font-bold text-navy mb-4 fade-in-up">About Us</h1>
+      <p class="text-indigo text-lg max-w-2xl mx-auto px-6 fade-in-up">Engineering Innovation With Precision</p>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="bg-gradient-to-r from-navy to-indigo py-12">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="fade-in-up">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">50+</div>
+          <div class="text-frost/80 mt-1">Projects Completed</div>
+        </div>
+        <div class="fade-in-up delay-100">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">30+</div>
+          <div class="text-frost/80 mt-1">Industrial Clients</div>
+        </div>
+        <div class="fade-in-up delay-200">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">8+</div>
+          <div class="text-frost/80 mt-1">Years Experience</div>
+        </div>
+        <div class="fade-in-up delay-300">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">24/7</div>
+          <div class="text-frost/80 mt-1">Emergency Support</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN ABOUT SECTION -->
+  <section class="py-16 bg-gradient-to-b from-pearl to-frost">
+    <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+
+      <!-- IMAGE -->
+      <div class="about-card rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-all duration-500">
+        <img 
+          src="/images/about-hero.png" 
+          class="w-full h-80 object-cover"
+          alt="About Nexon Engineering"
+        />
+      </div>
+
+      <!-- TEXT -->
+      <div class="fade-in-right">
+        <h2 class="text-3xl font-bold text-navy mb-6 flex items-center gap-3">
+          <span class="w-10 h-10 bg-gradient-to-br from-royal to-indigo rounded-xl flex items-center justify-center">
+            <i data-feather="users" class="w-5 h-5 text-pearl"></i>
+          </span>
+          Who We Are
+        </h2>
+        <p id="aboutWhoWeAreText" class="text-indigo/80 leading-relaxed mb-6">
+          Nexon Engineering is a trusted provider of industrial repair, maintenance, and automation services. We specialize in machine servicing, industrial electrical work, and custom engineering solutions designed to improve productivity and reliability. With a commitment to precision, innovation, and customer satisfaction, we deliver high-quality engineering services that keep your operations running at their best.
+        </p>
+        <p class="text-indigo/80 leading-relaxed mb-6">
+          At Nexon Engineering, we believe in quality workmanship, transparent service, and long-term solutions. Whether it is a routine service, a complex breakdown, a new installation, or a complete factory maintenance contract, we are committed to delivering results that exceed expectations.
+        </p>
+        <p class="text-indigo/80 leading-relaxed">
+          Driven by innovation and guided by professionalism, we aim to be a trusted partner for industries across Sri Lanka, providing services that enhance operational excellence and support sustainable growth.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MISSION + VISION -->
+  <section class="py-16 bg-gradient-to-b from-pearl to-frost">
+    <div class="container mx-auto px-6 grid md:grid-cols-2 gap-8">
+
+      <div class="about-card bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-500">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 bg-gradient-to-br from-royal to-indigo rounded-xl flex items-center justify-center">
+            <i data-feather="target" class="w-6 h-6 text-pearl"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-navy">Our Mission</h3>
+        </div>
+        <p id="aboutMissionText" class="text-indigo/80 leading-relaxed">
+          To deliver reliable, high-quality engineering solutions in machine repair, maintenance, automation, and industrial electrical services. We strive to innovate through advanced technologies, ensure customer satisfaction with integrity and professionalism, develop a skilled and safety-focused workforce, and build long-term partnerships by providing consistent, value-driven support.
+        </p>
+      </div>
+
+      <div class="about-card bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-500">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center">
+            <i data-feather="eye" class="w-6 h-6 text-pearl"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-navy">Our Vision</h3>
+        </div>
+        <p id="aboutVisionText" class="text-indigo/80 leading-relaxed">
+          To be Sri Lanka's leading and most trusted engineering services provider, delivering innovative, sustainable, and high-precision industrial solutions that empower businesses to achieve operational excellence.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gradient-to-br from-navy via-[#0d2a6e] to-indigo relative overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-royal/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-72 h-72 bg-indigo/20 rounded-full blur-3xl"></div>
+    </div>
+    <div class="container mx-auto px-6 relative z-10 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-pearl mb-4">Ready to Work With Us?</h2>
+      <p class="text-frost/80 text-lg mb-8 max-w-2xl mx-auto">Contact us today for a free consultation and quote. We'll assess your requirements and provide tailored solutions.</p>
+      <a href="contact.html" class="inline-flex items-center gap-2 px-8 py-4 bg-royal hover:bg-[#1976D2] text-pearl rounded-full font-semibold transition-all hover:shadow-xl hover:shadow-royal/30">
+        <i data-feather="message-circle" class="w-5 h-5"></i>
+        Get in Touch
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-navy text-pearl py-16">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      
+      <div>
+        <img src="/images/logo-large.png" class="h-16 mb-4 brightness-0 invert" alt="Nexon logo"/>
+        <p id="footerCompanyDescription" class="text-frost/80 leading-relaxed">
+          Nexon Engineering provides industrial repair, maintenance and automation solutions across residential, commercial and industrial projects.
+        </p>
+        <div class="flex gap-4 mt-6">
+          <a href="https://web.facebook.com/profile.php?id=61584696382140" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="facebook" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="linkedin" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="instagram" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
+        <ul class="space-y-3">
+          <li><a href="about.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> About Us</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Services</a></li>
+          <li><a href="projects.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Projects</a></li>
+          <li><a href="contact.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Services</h3>
+        <ul class="space-y-3">
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Machine Repair</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Electrical Wiring</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Automation</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Solar Installation</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Contact Us</h3>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <i data-feather="map-pin" class="w-5 h-5 text-royal mt-1 flex-shrink-0"></i>
+            <span class="text-frost/80">WVP9+FGX, Colombo 01000, Sri Lanka</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <i data-feather="mail" class="w-5 h-5 text-royal mt-1 flex-shrink-0"></i>
+            <a href="mailto:nexonengineering.service@gmail.com" class="text-frost/80 hover:text-royal transition-colors">nexonengineering.service@gmail.com</a>
+          </div>
+          <div class="flex gap-3">
+            <i data-feather="phone" class="w-5 h-5 text-royal flex-shrink-0"></i>
+            <a href="tel:+94773753621" class="text-frost/80 hover:text-royal transition-colors">+94 77 375 3621</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="footerCopyright" class="text-center text-frost/60 mt-12 pt-8 border-t border-white/10">
+      © 2025 NEXON Engineering Services (Pvt) Ltd. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="/navigation.js"></script>
+  <script src="scripts.js"></script>
+  <script>feather.replace();</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

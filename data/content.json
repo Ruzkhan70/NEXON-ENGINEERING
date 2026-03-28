@@ -1,0 +1,316 @@
+{
+  "home": {
+    "heroTitle": "Engineering Innovation with Precision",
+    "heroSubtitle": "Trusted industrial repair, maintenance & automation solutions for factories and businesses across Sri Lanka",
+    "heroLogo": "/images/hero-logo.png",
+    "aboutPreview": "Nexon Engineering is a trusted provider of industrial repair, maintenance, and automation services. We specialize in machine servicing, industrial electrical work, and custom engineering solutions designed to improve productivity and reliability.",
+    "stats": {
+      "projectsDone": "50",
+      "industrialClients": "30",
+      "yearsExperience": "8",
+      "emergencySupport": "24/7"
+    },
+    "whyChooseUs": {
+      "title": "Built on Excellence",
+      "subtitle": "What sets Nexon Engineering apart from the rest",
+      "items": [
+        {
+          "id": "reliable",
+          "icon": "shield",
+          "title": "Reliable Service",
+          "description": "Dependable solutions with consistent quality and on-time delivery every time."
+        },
+        {
+          "id": "support",
+          "icon": "clock",
+          "title": "24/7 Support",
+          "description": "Round-the-clock emergency breakdown support to minimize your downtime."
+        },
+        {
+          "id": "expert",
+          "icon": "award",
+          "title": "Expert Team",
+          "description": "Skilled engineers with years of hands-on industrial experience."
+        },
+        {
+          "id": "pricing",
+          "icon": "dollar-sign",
+          "title": "Best Pricing",
+          "description": "Competitive rates without compromising on quality or safety standards."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to Get Started?",
+      "description": "Contact us today for a free consultation and quote. Let's discuss how we can help optimize your operations.",
+      "buttonText": "Contact Now",
+      "phoneText": "+94 77 375 3621"
+    },
+    "services": {
+      "title": "Our Expertise",
+      "subtitle": "Comprehensive engineering solutions tailored to meet your industrial needs",
+      "buttonText": "View All Services"
+    }
+  },
+  "about": {
+    "heroTitle": "About Us",
+    "heroSubtitle": "Learn more about our company and our commitment to excellence",
+    "whoWeAre": {
+      "title": "Who We Are",
+      "description": "Nexon Engineering is a trusted provider of industrial repair, maintenance, and automation services. We specialize in machine servicing, industrial electrical work, and custom engineering solutions designed to improve productivity and reliability. With a commitment to precision, innovation, and customer satisfaction, we deliver high-quality engineering services that keep your operations running at their best."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "To deliver reliable, high-quality engineering solutions in machine repair, maintenance, automation, and industrial electrical services. We strive to innovate through advanced technologies, ensure customer satisfaction with integrity and professionalism, develop a skilled and safety-focused workforce, and build long-term partnerships by providing consistent, value-driven support."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "To be Sri Lanka's leading and most trusted engineering services provider, delivering innovative, sustainable, and high-precision industrial solutions that empower businesses to achieve operational excellence."
+    },
+    "stats": {
+      "projectsDone": "50+",
+      "clients": "30+",
+      "yearsExperience": "8+",
+      "teamMembers": "20+"
+    }
+  },
+  "services": {
+    "heroTitle": "Our Services",
+    "heroSubtitle": "Comprehensive engineering solutions for industrial, commercial, and residential needs",
+    "categories": [
+      {
+        "id": "electrical-machinery",
+        "title": "Electrical & Machinery",
+        "order": 1,
+        "services": [
+          {
+            "id": "machine-repair",
+            "title": "Machine Repair, Assembly & Maintenance",
+            "description": "We provide complete solutions for industrial machinery, including repair, assembly, and preventive maintenance. Our team handles mechanical and electrical troubleshooting, emergency breakdowns, and long-term factory maintenance contracts to ensure smooth and uninterrupted production.",
+            "image": "/images/service-machine-repair.png",
+            "buttonText": "Get Service"
+          },
+          {
+            "id": "electrical-wiring",
+            "title": "Industrial Electrical Wiring",
+            "description": "We undertake all types of industrial electrical installations, including control panel wiring, system upgrades, VFD setup and programming, and motor control systems. Our services also cover fault finding, rewiring, and concealed or floor wiring solutions for factories and commercial buildings.",
+            "image": "/images/service-electrical-wiring.png",
+            "buttonText": "Get Service"
+          }
+        ]
+      },
+      {
+        "id": "automation-electronics",
+        "title": "Automation & Electronics",
+        "order": 2,
+        "services": [
+          {
+            "id": "automation",
+            "title": "Industrial Automation",
+            "description": "We design and implement custom automation systems to increase production efficiency. Our services include PLC and HMI programming, automated system design, retrofitting old machines with modern automation, and integrating sensors and safety systems for improved performance.",
+            "image": "/images/service-automation.png",
+            "buttonText": "Get Service"
+          },
+          {
+            "id": "electronics-repair",
+            "title": "Industrial Electronics Repairs",
+            "description": "We repair industrial electronic boards, automation modules, sensors, and other control components to restore full functionality and ensure reliable machine performance.",
+            "image": "/images/service-electronics.png",
+            "buttonText": "Get Service"
+          }
+        ]
+      },
+      {
+        "id": "mechanical-fabrication",
+        "title": "Mechanical & Fabrication",
+        "order": 3,
+        "services": [
+          {
+            "id": "fabrication",
+            "title": "Mechanical Fabrication",
+            "description": "We handle all types of mechanical fabrication work, including welding, machine part repairs, component modification, and custom fabrication of brackets, frames, and conveyor structures to suit specific industrial needs.",
+            "image": "/images/service-fabrication.png",
+            "buttonText": "Get Service"
+          },
+          {
+            "id": "spare-parts",
+            "title": "Spare Parts & Components",
+            "description": "We supply a range of industrial electrical components, machine parts, and accessories to support maintenance, repairs, and production requirements.",
+            "image": "/images/service-spare-parts.png",
+            "buttonText": "Get Service"
+          }
+        ]
+      },
+      {
+        "id": "industrial-support",
+        "title": "Industrial Support & Services",
+        "order": 4,
+        "services": [
+          {
+            "id": "technical-support",
+            "title": "On-Site Technical Support",
+            "description": "We offer reliable on-site technical assistance, including on-call machine servicing, troubleshooting visits, consultancy for new installations, and 24/7 emergency breakdown support to minimize downtime and ensure continuous operations.",
+            "image": "/images/service-technical-support.png"
+          },
+          {
+            "id": "industrial-services",
+            "title": "Industrial Services",
+            "description": "Our industrial services cover factory setup and commissioning, preventive maintenance planning, power distribution installation, and energy-efficient solutions.",
+            "image": "/images/service-industrial.png"
+          },
+          {
+            "id": "compressed-air",
+            "title": "Compressed Air Systems",
+            "description": "Professional compressed air line installation, repair, and maintenance services for industrial environments. We ensure leak-free pipelines and optimal air flow.",
+            "image": "/images/service-compressed-air.png"
+          }
+        ]
+      },
+      {
+        "id": "solar-security",
+        "title": "Solar & Security Systems",
+        "order": 5,
+        "services": [
+          {
+            "id": "solar",
+            "title": "Solar Engineering",
+            "description": "We provide professional solar installation services for factories and businesses. This includes solar panel wiring, testing, commissioning, and hybrid or off-grid system setup. (Labour-only work available for clients who supply equipment.)",
+            "image": "/images/service-solar.jpg",
+            "buttonText": "Get Service"
+          },
+          {
+            "id": "cctv",
+            "title": "CCTV Installation & Service",
+            "description": "We provide CCTV installation, repair, maintenance, and system configuration services. Whether upgrading existing systems or installing new setups, we ensure secure and high-quality surveillance solutions for homes and businesses.",
+            "image": "/images/service-cctv.png",
+            "buttonText": "Get Service"
+          }
+        ]
+      }
+    ],
+    "cta": {
+      "title": "Need a Custom Solution?",
+      "description": "Contact us today for a free consultation and quote. We'll assess your requirements and provide tailored solutions.",
+      "buttonText": "Get in Touch"
+    }
+  },
+  "projects": {
+    "heroTitle": "Our Projects",
+    "heroSubtitle": "Explore our portfolio of successful industrial engineering projects",
+    "projects": [
+      {
+        "id": "project-1",
+        "title": "Industrial Automation System",
+        "description": "Complete automation upgrade for a manufacturing facility including PLC programming, HMI interfaces, and sensor integration.",
+        "category": "Automation",
+        "image": "/images/project-1.png",
+        "client": "Manufacturing Corp",
+        "year": "2024"
+      },
+      {
+        "id": "project-2",
+        "title": "Solar Panel Installation",
+        "description": "Grid-tied solar power system installation for commercial building with monitoring and backup capabilities.",
+        "category": "Solar",
+        "image": "/images/project-2.png",
+        "client": "Commercial Building",
+        "year": "2024"
+      },
+      {
+        "id": "project-3",
+        "title": "Machine Repair & Maintenance",
+        "description": "Comprehensive repair and preventive maintenance program for industrial CNC machines.",
+        "category": "Maintenance",
+        "image": "/images/project-3.png",
+        "client": "Factory A",
+        "year": "2023"
+      }
+    ],
+    "cta": {
+      "title": "Have a Project in Mind?",
+      "description": "Let's discuss how we can bring your engineering vision to life.",
+      "buttonText": "Contact Us"
+    }
+  },
+  "clients": {
+    "heroTitle": "Our Clients",
+    "heroSubtitle": "Trusted by leading companies across Sri Lanka",
+    "clients": [
+      {
+        "id": "client-1",
+        "name": "Client 1",
+        "logo": "/images/client-1.png"
+      },
+      {
+        "id": "client-2",
+        "name": "Client 2",
+        "logo": "/images/client-2.png"
+      },
+      {
+        "id": "client-3",
+        "name": "Client 3",
+        "logo": "/images/client-3.png"
+      },
+      {
+        "id": "client-4",
+        "name": "Client 4",
+        "logo": "/images/client-4.png"
+      },
+      {
+        "id": "client-5",
+        "name": "Client 5",
+        "logo": "/images/client-5.png"
+      },
+      {
+        "id": "client-6",
+        "name": "Client 6",
+        "logo": "/images/client-6.png"
+      }
+    ],
+    "cta": {
+      "title": "Become Our Partner",
+      "description": "Join our growing list of satisfied clients and experience quality engineering services.",
+      "buttonText": "Get in Touch"
+    }
+  },
+  "contact": {
+    "heroTitle": "Contact Us",
+    "heroSubtitle": "We'd love to hear from you. Get in touch for a free consultation.",
+    "address": "WVP9+FGX, Colombo 01000, Sri Lanka",
+    "email": "nexonengineering.service@gmail.com",
+    "phone": "+94 77 375 3621",
+    "whatsapp": "+94773753621",
+    "cta": {
+      "title": "Ready to Get Started?",
+      "description": "Contact us today for a free consultation and quote.",
+      "buttonText": "Send Message"
+    }
+  },
+  "footer": {
+    "companyDescription": "Nexon Engineering provides industrial repair, maintenance and automation solutions across residential, commercial and industrial projects.",
+    "copyright": "© 2025 NEXON Engineering Services (Pvt) Ltd. All rights reserved.",
+    "socialLinks": {
+      "facebook": "https://web.facebook.com/profile.php?id=61584696382140",
+      "linkedin": "",
+      "instagram": ""
+    },
+    "quickLinks": [
+      {
+        "label": "About Us",
+        "url": "/about.html"
+      },
+      {
+        "label": "Services",
+        "url": "/services.html"
+      },
+      {
+        "label": "Projects",
+        "url": "/projects.html"
+      },
+      {
+        "label": "Contact",
+        "url": "/contact.html"
+      }
+    ]
+  }
+}

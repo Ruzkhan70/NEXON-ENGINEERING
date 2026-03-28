@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Services — NEXON Engineering Services</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            frost: "#E1F5FE",
+            navy: "#0A2463",
+            indigo: "#3E5C76",
+            royal: "#1E88E5",
+            pearl: "#F8F9FA",
+          }
+        }
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .nav-links a {
+      position: relative;
+      text-decoration: none;
+      color: #0A2463;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background-color: #1E88E5;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.text-royal::after {
+      width: 100%;
+    }
+
+    .nav-links a.text-royal {
+      color: #1E88E5;
+    }
+
+    .service-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #1E88E5, #00d4ff);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-card img {
+      transition: transform 0.5s ease;
+    }
+
+    .service-card:hover img {
+      transform: scale(1.08);
+    }
+
+    .category-header {
+      position: relative;
+      display: inline-block;
+    }
+
+    .category-header::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #1E88E5, #00d4ff);
+      border-radius: 2px;
+    }
+
+    .parallax-section {
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    .parallax-element {
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+
+    .service-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+
+    .service-card:hover img {
+      transform: scale(1.1);
+    }
+
+    .service-card .service-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .service-card:hover .service-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .category-card {
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .category-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(30, 136, 229, 0.15);
+    }
+  </style>
+</head>
+
+<body class="bg-pearl">
+
+  <!-- Scroll Progress -->
+  <div id="scroll-progress" class="scroll-progress" style="width: 0%"></div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-pearl/95 backdrop-blur-lg shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center group">
+        <div class="logo">
+          <img src="/images/logo-small.png" alt="Nexon" class="h-12 transition-transform group-hover:scale-105" />
+          <span class="company-name text-xs lg:text-lg text-navy font-semibold ml-2">
+            NEXON ENGINEERING SERVICES (PVT) LTD
+          </span>
+        </div>
+      </a>
+
+      <div class="hidden md:flex space-x-8 text-navy font-medium nav-links" id="dynamic-nav">
+        <a href="index.html" class="hover:text-royal">Home</a>
+        <a href="about.html" class="hover:text-royal">About</a>
+        <a href="services.html" class="text-royal">Services</a>
+        <a href="projects.html" class="hover:text-royal">Projects</a>
+        <a href="our-clients.html" class="hover:text-royal">Our Clients</a>
+        <a href="contact.html" class="hover:text-royal">Contact</a>
+      </div>
+
+      <a href="contact.html" class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-royal hover:bg-[#1976D2] text-pearl rounded-full text-sm font-medium transition-all hover:shadow-lg">
+        Get Quote
+      </a>
+
+      <button id="mobile-btn" class="md:hidden text-navy p-2">
+        <i data-feather="menu"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden bg-navy/95 backdrop-blur-lg text-pearl px-6 py-6 space-y-4 md:hidden border-t border-white/10">
+      <div id="dynamic-mobile-nav" class="space-y-2"></div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="pt-36 pb-12 bg-gradient-to-b from-frost to-pearl text-center relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10">
+      <div class="absolute top-10 left-10 w-64 h-64 bg-royal/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-80 h-80 bg-indigo/20 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative z-10">
+      <span class="inline-block px-4 py-1.5 bg-royal/10 text-royal rounded-full text-sm font-medium mb-4 fade-in-up">Our Expertise</span>
+      <h1 class="text-4xl md:text-5xl font-bold text-navy mb-4 fade-in-up">Our Services</h1>
+      <p class="text-indigo text-lg max-w-2xl mx-auto px-6 fade-in-up">Comprehensive engineering solutions for industrial, commercial, and residential needs</p>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="py-16 bg-gradient-to-b from-pearl via-frost to-pearl parallax-section">
+    <div class="max-w-7xl mx-auto px-6">
+
+      <!-- CATEGORY 1: ELECTRICAL & MACHINERY -->
+      <div class="mb-20">
+        <h2 class="category-header text-3xl font-bold text-navy mb-10 fade-in-left">Electrical & Machinery</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-56 overflow-hidden">
+              <img src="/images/service-machine-repair.png" class="w-full h-full object-cover" alt="Machine Repair">
+            </div>
+            <div class="p-8">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-royal to-indigo rounded-xl flex items-center justify-center">
+                  <i data-feather="settings" class="w-6 h-6 text-pearl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy">Machine Repair, Assembly & Maintenance</h3>
+              </div>
+              <p class="text-indigo/80 leading-relaxed">We provide complete solutions for industrial machinery, including repair, assembly, and preventive maintenance. Our team handles mechanical and electrical troubleshooting, emergency breakdowns, and long-term factory maintenance contracts to ensure smooth and uninterrupted production.</p>
+              <a href="contact.html" class="inline-flex items-center gap-2 mt-6 text-royal font-medium hover:gap-3 transition-all">
+                Get Service <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-56 overflow-hidden">
+              <img src="/images/service-electrical-wiring.png" class="w-full h-full object-cover" alt="Electrical Wiring">
+            </div>
+            <div class="p-8">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center">
+                  <i data-feather="zap" class="w-6 h-6 text-pearl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy">Industrial Electrical Wiring</h3>
+              </div>
+              <p class="text-indigo/80 leading-relaxed">We undertake all types of industrial electrical installations, including control panel wiring, system upgrades, VFD setup and programming, and motor control systems. Our services also cover fault finding, rewiring, and concealed or floor wiring solutions for factories and commercial buildings.</p>
+              <a href="contact.html" class="inline-flex items-center gap-2 mt-6 text-royal font-medium hover:gap-3 transition-all">
+                Get Service <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CATEGORY 2: AUTOMATION & ELECTRONICS -->
+      <div class="mb-20">
+        <h2 class="category-header text-3xl font-bold text-navy mb-10 fade-in-left">Automation & Electronics</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-56 overflow-hidden">
+              <img src="/images/service-automation.png" class="w-full h-full object-cover" alt="Automation">
+            </div>
+            <div class="p-8">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center">
+                  <i data-feather="cpu" class="w-6 h-6 text-pearl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy">Industrial Automation</h3>
+              </div>
+              <p class="text-indigo/80 leading-relaxed">We design and implement custom automation systems to increase production efficiency. Our services include PLC and HMI programming, automated system design, retrofitting old machines with modern automation, and integrating sensors and safety systems for improved performance.</p>
+              <a href="contact.html" class="inline-flex items-center gap-2 mt-6 text-royal font-medium hover:gap-3 transition-all">
+                Get Service <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-56 overflow-hidden">
+              <img src="/images/service-electronics.png" class="w-full h-full object-cover" alt="Electronics">
+            </div>
+            <div class="p-8">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-500 rounded-xl flex items-center justify-center">
+                  <i data-feather="activity" class="w-6 h-6 text-pearl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy">Industrial Electronics Repairs</h3>
+              </div>
+              <p class="text-indigo/80 leading-relaxed">We repair industrial electronic boards, automation modules, sensors, and other control components to restore full functionality and ensure reliable machine performance.</p>
+              <a href="contact.html" class="inline-flex items-center gap-2 mt-6 text-royal font-medium hover:gap-3 transition-all">
+                Get Service <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CATEGORY 3: MECHANICAL & FABRICATION -->
+      <div class="mb-20">
+        <h2 class="category-header text-3xl font-bold text-navy mb-10 fade-in-left">Mechanical & Fabrication</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-56 overflow-hidden">
+              <img src="/images/service-fabrication.png" class="w-full h-full object-cover" alt="Fabrication">
+            </div>
+            <div class="p-8">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-rose-500 to-pink-500 rounded-xl flex items-center justify-center">
+                  <i data-feather="tool" class="w-6 h-6 text-pearl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy">Mechanical Fabrication</h3>
+              </div>
+              <p class="text-indigo/80 leading-relaxed">We handle all types of mechanical fabrication work, including welding, machine part repairs, component modification, and custom fabrication of brackets, frames, and conveyor structures to suit specific industrial needs.</p>
+              <a href="contact.html" class="inline-flex items-center gap-2 mt-6 text-royal font-medium hover:gap-3 transition-all">
+                Get Service <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-56 overflow-hidden">
+              <img src="/images/service-spare-parts.png" class="w-full h-full object-cover" alt="Spare Parts">
+            </div>
+            <div class="p-8">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center">
+                  <i data-feather="package" class="w-6 h-6 text-pearl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy">Spare Parts & Components</h3>
+              </div>
+              <p class="text-indigo/80 leading-relaxed">We supply a range of industrial electrical components, machine parts, and accessories to support maintenance, repairs, and production requirements.</p>
+              <a href="contact.html" class="inline-flex items-center gap-2 mt-6 text-royal font-medium hover:gap-3 transition-all">
+                Get Service <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CATEGORY 4: INDUSTRIAL SUPPORT -->
+      <div class="mb-20">
+        <h2 class="category-header text-3xl font-bold text-navy mb-10 fade-in-left">Industrial Support & Services</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-48 overflow-hidden">
+              <img src="/images/service-technical-support.png" class="w-full h-full object-cover" alt="Technical Support">
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-royal to-indigo rounded-lg flex items-center justify-center">
+                  <i data-feather="headphones" class="w-5 h-5 text-pearl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-navy">On-Site Technical Support</h3>
+              </div>
+              <p class="text-indigo/80 text-sm leading-relaxed">We offer reliable on-site technical assistance, including on-call machine servicing, troubleshooting visits, consultancy for new installations, and 24/7 emergency breakdown support to minimize downtime and ensure continuous operations.</p>
+            </div>
+          </div>
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-48 overflow-hidden">
+              <img src="/images/service-industrial.png" class="w-full h-full object-cover" alt="Industrial Services">
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg flex items-center justify-center">
+                  <i data-feather="briefcase" class="w-5 h-5 text-pearl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-navy">Industrial Services</h3>
+              </div>
+              <p class="text-indigo/80 text-sm leading-relaxed">Our industrial services cover factory setup and commissioning, preventive maintenance planning, power distribution installation, and energy-efficient solutions.</p>
+            </div>
+          </div>
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-48 overflow-hidden">
+              <img src="/images/service-compressed-air.png" class="w-full h-full object-cover" alt="Compressed Air">
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-sky-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                  <i data-feather="wind" class="w-5 h-5 text-pearl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-navy">Compressed Air Systems</h3>
+              </div>
+              <p class="text-indigo/80 text-sm leading-relaxed">Professional compressed air line installation, repair, and maintenance services for industrial environments. We ensure leak-free pipelines and optimal air flow.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CATEGORY 5: SOLAR & SECURITY -->
+      <div class="mb-10">
+        <h2 class="category-header text-3xl font-bold text-navy mb-10 fade-in-left">Solar & Security Systems</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-56 overflow-hidden">
+              <img src="/images/service-solar.jpg" class="w-full h-full object-cover" alt="Solar">
+            </div>
+            <div class="p-8">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center">
+                  <i data-feather="sun" class="w-6 h-6 text-pearl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy">Solar Engineering</h3>
+              </div>
+              <p class="text-indigo/80 leading-relaxed">We provide professional solar installation services for factories and businesses. This includes solar panel wiring, testing, commissioning, and hybrid or off-grid system setup. (Labour-only work available for clients who supply equipment.)</p>
+              <a href="contact.html" class="inline-flex items-center gap-2 mt-6 text-royal font-medium hover:gap-3 transition-all">
+                Get Service <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="service-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group">
+            <div class="h-56 overflow-hidden">
+              <img src="/images/service-cctv.png" class="w-full h-full object-cover" alt="CCTV">
+            </div>
+            <div class="p-8">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center">
+                  <i data-feather="video" class="w-6 h-6 text-pearl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-navy">CCTV Installation & Service</h3>
+              </div>
+              <p class="text-indigo/80 leading-relaxed">We provide CCTV installation, repair, maintenance, and system configuration services. Whether upgrading existing systems or installing new setups, we ensure secure and high-quality surveillance solutions for homes and businesses.</p>
+              <a href="contact.html" class="inline-flex items-center gap-2 mt-6 text-royal font-medium hover:gap-3 transition-all">
+                Get Service <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gradient-to-br from-navy via-[#0d2a6e] to-indigo relative overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-royal/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-72 h-72 bg-indigo/20 rounded-full blur-3xl"></div>
+    </div>
+    <div class="container mx-auto px-6 relative z-10 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-pearl mb-4">Need a Custom Solution?</h2>
+      <p class="text-frost/80 text-lg mb-8 max-w-2xl mx-auto">Contact us today for a free consultation and quote. We'll assess your requirements and provide tailored solutions.</p>
+      <a href="contact.html" class="inline-flex items-center gap-2 px-8 py-4 bg-royal hover:bg-[#1976D2] text-pearl rounded-full font-semibold transition-all hover:shadow-xl hover:shadow-royal/30">
+        <i data-feather="message-circle" class="w-5 h-5"></i>
+        Get in Touch
+      </a>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="bg-navy text-pearl py-16">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      
+      <div>
+        <img src="/images/logo-large.png" class="h-16 mb-4 brightness-0 invert" alt="Nexon logo"/>
+        <p id="footerCompanyDescription" class="text-frost/80 leading-relaxed">
+          Nexon Engineering provides industrial repair, maintenance and automation solutions across residential, commercial and industrial projects.
+        </p>
+        <div class="flex gap-4 mt-6">
+          <a href="https://web.facebook.com/profile.php?id=61584696382140" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="facebook" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="linkedin" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="instagram" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
+        <ul class="space-y-3">
+          <li><a href="about.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> About Us</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Services</a></li>
+          <li><a href="projects.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Projects</a></li>
+          <li><a href="contact.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Services</h3>
+        <ul class="space-y-3">
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Machine Repair</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Electrical Wiring</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Automation</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Solar Installation</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Contact Us</h3>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <i data-feather="map-pin" class="w-5 h-5 text-royal mt-1 flex-shrink-0"></i>
+            <span class="text-frost/80">WVP9+FGX, Colombo 01000, Sri Lanka</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <i data-feather="mail" class="w-5 h-5 text-royal mt-1 flex-shrink-0"></i>
+            <a href="mailto:nexonengineering.service@gmail.com" class="text-frost/80 hover:text-royal transition-colors">nexonengineering.service@gmail.com</a>
+          </div>
+          <div class="flex gap-3">
+            <i data-feather="phone" class="w-5 h-5 text-royal flex-shrink-0"></i>
+            <a href="tel:+94773753621" class="text-frost/80 hover:text-royal transition-colors">+94 77 375 3621</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="footerCopyright" class="text-center text-frost/60 mt-12 pt-8 border-t border-white/10">
+      © 2025 NEXON Engineering Services (Pvt) Ltd. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="/navigation.js"></script>
+  <script src="scripts.js"></script>
+  <script>feather.replace();</script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.querySelector('.parallax-section');
+      const parallaxElements = document.querySelectorAll('.parallax-element');
+      
+      if (container && parallaxElements.length > 0) {
+        let mouseX = 0;
+        let mouseY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        
+        document.addEventListener('mousemove', function(e) {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        });
+        
+        function animate() {
+          const windowWidth = window.innerWidth;
+          const windowHeight = window.innerHeight;
+          
+          currentX += (mouseX - currentX) * 0.05;
+          currentY += (mouseY - currentY) * 0.05;
+          
+          const xOffset = (currentX / windowWidth - 0.5) * 20;
+          const yOffset = (currentY / windowHeight - 0.5) * 20;
+          
+          parallaxElements.forEach((el, index) => {
+            const depth = (index + 1) * 0.5;
+            const moveX = xOffset * depth;
+            const moveY = yOffset * depth;
+            el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+          });
+          
+          requestAnimationFrame(animate);
+        }
+        
+        animate();
+      }
+
+      const serviceCards = document.querySelectorAll('.service-card');
+      serviceCards.forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+          const rect = this.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = (y - centerY) / 20;
+          const rotateY = (centerX - x) / 20;
+          
+          this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`;
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

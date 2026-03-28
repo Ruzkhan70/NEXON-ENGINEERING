@@ -1,0 +1,27 @@
+{
+  "about": {
+    "visible": true,
+    "label": "About",
+    "order": 1
+  },
+  "services": {
+    "visible": true,
+    "label": "Services",
+    "order": 2
+  },
+  "projects": {
+    "visible": true,
+    "label": "Projects",
+    "order": 3
+  },
+  "our-clients": {
+    "visible": true,
+    "label": "Our Clients",
+    "order": 4
+  },
+  "contact": {
+    "visible": true,
+    "label": "Contact",
+    "order": 5
+  }
+}

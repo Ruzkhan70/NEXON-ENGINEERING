@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Projects — NEXON Engineering Services</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            frost: "#E1F5FE",
+            navy: "#0A2463",
+            indigo: "#3E5C76",
+            royal: "#1E88E5",
+            pearl: "#F8F9FA",
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .nav-links a {
+      position: relative;
+      text-decoration: none;
+      color: #0A2463;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background-color: #1E88E5;
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after,
+    .nav-links a.text-royal::after {
+      width: 100%;
+    }
+    .nav-links a.text-royal {
+      color: #1E88E5;
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10, 36, 99, 0.95), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .project-card:hover .overlay {
+      opacity: 1;
+    }
+    .project-card .content {
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+    .project-card:hover .content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .project-card img {
+      transition: transform 0.6s ease;
+    }
+    .project-card:hover img {
+      transform: scale(1.1);
+    }
+
+    .filter-btn.active {
+      background: #1E88E5;
+      color: white;
+    }
+  </style>
+</head>
+
+<body class="bg-pearl">
+
+  <!-- Scroll Progress -->
+  <div id="scroll-progress" class="scroll-progress" style="width: 0%"></div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-pearl/95 backdrop-blur-lg shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center group">
+        <div class="logo">
+          <img src="/images/logo-small.png" alt="Nexon" class="h-12 transition-transform group-hover:scale-105" />
+          <span class="company-name text-xs lg:text-lg text-navy font-semibold ml-2">
+            NEXON ENGINEERING SERVICES (PVT) LTD
+          </span>
+        </div>
+      </a>
+
+      <div class="hidden md:flex space-x-8 text-navy font-medium nav-links" id="dynamic-nav">
+        <a href="index.html" class="hover:text-royal">Home</a>
+        <a href="about.html" class="hover:text-royal">About</a>
+        <a href="services.html" class="hover:text-royal">Services</a>
+        <a href="projects.html" class="text-royal">Projects</a>
+        <a href="our-clients.html" class="hover:text-royal">Our Clients</a>
+        <a href="contact.html" class="hover:text-royal">Contact</a>
+      </div>
+
+      <a href="contact.html" class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-royal hover:bg-[#1976D2] text-pearl rounded-full text-sm font-medium transition-all hover:shadow-lg">
+        Get Quote
+      </a>
+
+      <button id="mobile-btn" class="md:hidden text-navy p-2">
+        <i data-feather="menu"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden bg-navy/95 backdrop-blur-lg text-pearl px-6 py-6 space-y-4 md:hidden border-t border-white/10">
+      <div id="dynamic-mobile-nav" class="space-y-2"></div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="pt-36 pb-12 bg-gradient-to-b from-frost to-pearl text-center relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10">
+      <div class="absolute top-10 right-20 w-72 h-72 bg-royal/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 left-20 w-64 h-64 bg-indigo/20 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative z-10">
+      <span class="inline-block px-4 py-1.5 bg-royal/10 text-royal rounded-full text-sm font-medium mb-4 fade-in-up">Portfolio</span>
+      <h1 class="text-4xl md:text-5xl font-bold text-navy mb-4 fade-in-up">Our Projects</h1>
+      <p class="text-indigo text-lg max-w-2xl mx-auto px-6 fade-in-up">Real-world solutions we've delivered to clients across industries</p>
+    </div>
+  </section>
+
+  <!-- Filter Buttons -->
+  <section class="py-8 bg-pearl sticky top-16 z-40 border-b border-gray-100">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-wrap justify-center gap-3">
+        <button class="filter-btn active px-5 py-2 rounded-full text-sm font-medium bg-gray-200 text-navy hover:bg-royal hover:text-pearl transition-all" data-filter="all">All Projects</button>
+        <button class="filter-btn px-5 py-2 rounded-full text-sm font-medium bg-gray-200 text-navy hover:bg-royal hover:text-pearl transition-all" data-filter="automation">Automation</button>
+        <button class="filter-btn px-5 py-2 rounded-full text-sm font-medium bg-gray-200 text-navy hover:bg-royal hover:text-pearl transition-all" data-filter="electrical">Electrical</button>
+        <button class="filter-btn px-5 py-2 rounded-full text-sm font-medium bg-gray-200 text-navy hover:bg-royal hover:text-pearl transition-all" data-filter="solar">Solar</button>
+        <button class="filter-btn px-5 py-2 rounded-full text-sm font-medium bg-gray-200 text-navy hover:bg-royal hover:text-pearl transition-all" data-filter="security">Security</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="bg-gradient-to-r from-navy to-indigo py-12">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="fade-in-up">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">50+</div>
+          <div class="text-frost/80 mt-1">Projects Completed</div>
+        </div>
+        <div class="fade-in-up delay-100">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">30+</div>
+          <div class="text-frost/80 mt-1">Industrial Clients</div>
+        </div>
+        <div class="fade-in-up delay-200">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">8+</div>
+          <div class="text-frost/80 mt-1">Years Experience</div>
+        </div>
+        <div class="fade-in-up delay-300">
+          <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">24/7</div>
+          <div class="text-frost/80 mt-1">Emergency Support</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Grid -->
+  <section class="py-16 bg-gradient-to-b from-pearl to-frost">
+    <div class="container mx-auto px-6">
+
+      <!-- Industrial Automation -->
+      <div class="mb-16">
+        <h2 class="text-2xl font-bold text-navy mb-8 fade-in-left flex items-center gap-3">
+          <span class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center">
+            <i data-feather="cpu" class="w-5 h-5 text-pearl"></i>
+          </span>
+          Industrial Automation
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          
+          <div class="project-card rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-all duration-500" data-category="automation">
+            <div class="relative h-56 overflow-hidden">
+              <img src="https://picsum.photos/seed/industrial1/640/360" alt="PLC Control Panel" class="w-full h-full object-cover" />
+              <div class="overlay"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-emerald-500 text-pearl text-xs font-medium rounded-full">Automation</span>
+              </div>
+              <div class="content absolute bottom-0 left-0 right-0 p-6">
+                <a href="contact.html" class="inline-flex items-center gap-2 text-pearl font-medium hover:gap-3 transition-all">
+                  View Details <i data-feather="arrow-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-bold text-navy mb-2">Assembly Line PLC Integration</h3>
+              <p class="text-indigo/70 text-sm mb-4">Complete PLC programming and HMI interface for a textile manufacturing plant, reducing manual intervention by 60%.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">Siemens PLC</span>
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">HMI Design</span>
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">Integration</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-all duration-500" data-category="automation">
+            <div class="relative h-56 overflow-hidden">
+              <img src="https://picsum.photos/seed/conveyor2/640/360" alt="Conveyor System" class="w-full h-full object-cover" />
+              <div class="overlay"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-emerald-500 text-pearl text-xs font-medium rounded-full">Automation</span>
+              </div>
+              <div class="content absolute bottom-0 left-0 right-0 p-6">
+                <a href="contact.html" class="inline-flex items-center gap-2 text-pearl font-medium hover:gap-3 transition-all">
+                  View Details <i data-feather="arrow-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-bold text-navy mb-2">Automated Conveyor System</h3>
+              <p class="text-indigo/70 text-sm mb-4">Design and installation of variable speed conveyor system with sensors and programmable logic for sorting facility.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">VFD Control</span>
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">Sensors</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-all duration-500" data-category="automation">
+            <div class="relative h-56 overflow-hidden">
+              <img src="https://picsum.photos/seed/robotics3/640/360" alt="Robotic Arm" class="w-full h-full object-cover" />
+              <div class="overlay"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-emerald-500 text-pearl text-xs font-medium rounded-full">Automation</span>
+              </div>
+              <div class="content absolute bottom-0 left-0 right-0 p-6">
+                <a href="contact.html" class="inline-flex items-center gap-2 text-pearl font-medium hover:gap-3 transition-all">
+                  View Details <i data-feather="arrow-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-bold text-navy mb-2">Pick-and-Place Robotic Cell</h3>
+              <p class="text-indigo/70 text-sm mb-4">Installed and programmed robotic arm for packaging line, increasing throughput by 40% with consistent accuracy.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">Robotics</span>
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">Packaging</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Electrical & Machinery -->
+      <div class="mb-16">
+        <h2 class="text-2xl font-bold text-navy mb-8 fade-in-left flex items-center gap-3">
+          <span class="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center">
+            <i data-feather="zap" class="w-5 h-5 text-pearl"></i>
+          </span>
+          Electrical & Machinery
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+          <div class="project-card rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-all duration-500" data-category="electrical">
+            <div class="relative h-56 overflow-hidden">
+              <img src="https://picsum.photos/seed/electrical4/640/360" alt="Control Panel" class="w-full h-full object-cover" />
+              <div class="overlay"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-amber-500 text-pearl text-xs font-medium rounded-full">Electrical</span>
+              </div>
+              <div class="content absolute bottom-0 left-0 right-0 p-6">
+                <a href="contact.html" class="inline-flex items-center gap-2 text-pearl font-medium hover:gap-3 transition-all">
+                  View Details <i data-feather="arrow-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-bold text-navy mb-2">Factory Electrical Rewiring</h3>
+              <p class="text-indigo/70 text-sm mb-4">Complete rewire of 5,000 sq ft manufacturing facility including new distribution boards, cable routing, and safety systems.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">3-Phase</span>
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">Distribution</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-all duration-500" data-category="electrical">
+            <div class="relative h-56 overflow-hidden">
+              <img src="https://picsum.photos/seed/machine5/640/360" alt="CNC Machine" class="w-full h-full object-cover" />
+              <div class="overlay"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-amber-500 text-pearl text-xs font-medium rounded-full">Electrical</span>
+              </div>
+              <div class="content absolute bottom-0 left-0 right-0 p-6">
+                <a href="contact.html" class="inline-flex items-center gap-2 text-pearl font-medium hover:gap-3 transition-all">
+                  View Details <i data-feather="arrow-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-bold text-navy mb-2">CNC Machine Retrofit</h3>
+              <p class="text-indigo/70 text-sm mb-4">Upgraded 15-year-old CNC machine with modern controller, servo drives, and PLC integration for improved precision.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">Retrofit</span>
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">CNC</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-all duration-500" data-category="electrical">
+            <div class="relative h-56 overflow-hidden">
+              <img src="https://picsum.photos/seed/motor6/640/360" alt="Motor Installation" class="w-full h-full object-cover" />
+              <div class="overlay"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-amber-500 text-pearl text-xs font-medium rounded-full">Electrical</span>
+              </div>
+              <div class="content absolute bottom-0 left-0 right-0 p-6">
+                <a href="contact.html" class="inline-flex items-center gap-2 text-pearl font-medium hover:gap-3 transition-all">
+                  View Details <i data-feather="arrow-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-bold text-navy mb-2">Motor Control Center Upgrade</h3>
+              <p class="text-indigo/70 text-sm mb-4">Installed new MCC with VFDs for 12 motors in beverage processing plant, achieving 25% energy savings.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">VFD</span>
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">Energy Saving</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Solar & Security -->
+      <div class="mb-16">
+        <h2 class="text-2xl font-bold text-navy mb-8 fade-in-left flex items-center gap-3">
+          <span class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center">
+            <i data-feather="sun" class="w-5 h-5 text-pearl"></i>
+          </span>
+          Solar & Security
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+          <div class="project-card rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-all duration-500" data-category="solar">
+            <div class="relative h-56 overflow-hidden">
+              <img src="https://picsum.photos/seed/solar7/640/360" alt="Solar Installation" class="w-full h-full object-cover" />
+              <div class="overlay"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-yellow-500 text-pearl text-xs font-medium rounded-full">Solar</span>
+              </div>
+              <div class="content absolute bottom-0 left-0 right-0 p-6">
+                <a href="contact.html" class="inline-flex items-center gap-2 text-pearl font-medium hover:gap-3 transition-all">
+                  View Details <i data-feather="arrow-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-bold text-navy mb-2">50kW Factory Solar System</h3>
+              <p class="text-indigo/70 text-sm mb-4">Designed and installed rooftop solar system with hybrid inverter, battery backup, and remote monitoring dashboard.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">50kW</span>
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">Hybrid</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-all duration-500" data-category="security">
+            <div class="relative h-56 overflow-hidden">
+              <img src="https://picsum.photos/seed/cctv8/640/360" alt="CCTV Cameras" class="w-full h-full object-cover" />
+              <div class="overlay"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-emerald-500 text-pearl text-xs font-medium rounded-full">Security</span>
+              </div>
+              <div class="content absolute bottom-0 left-0 right-0 p-6">
+                <a href="contact.html" class="inline-flex items-center gap-2 text-pearl font-medium hover:gap-3 transition-all">
+                  View Details <i data-feather="arrow-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-bold text-navy mb-2">16-Camera Surveillance System</h3>
+              <p class="text-indigo/70 text-sm mb-4">IP-based CCTV installation with NVR, remote viewing app, night vision cameras, and motion detection alerts.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">IP Camera</span>
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">NVR</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-2xl transition-all duration-500" data-category="electrical">
+            <div class="relative h-56 overflow-hidden">
+              <img src="https://picsum.photos/seed/welding9/640/360" alt="Fabrication Work" class="w-full h-full object-cover" />
+              <div class="overlay"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 bg-rose-500 text-pearl text-xs font-medium rounded-full">Fabrication</span>
+              </div>
+              <div class="content absolute bottom-0 left-0 right-0 p-6">
+                <a href="contact.html" class="inline-flex items-center gap-2 text-pearl font-medium hover:gap-3 transition-all">
+                  View Details <i data-feather="arrow-right" class="w-4 h-4"></i>
+                </a>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-bold text-navy mb-2">Custom Conveyor Frame Fabrication</h3>
+              <p class="text-indigo/70 text-sm mb-4">Fabricated and installed 20-meter stainless steel conveyor structure with custom brackets and support stands.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">SS Welding</span>
+                <span class="text-xs bg-frost text-navy px-2 py-1 rounded">Custom</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="bg-gradient-to-r from-royal to-indigo rounded-3xl p-10 md:p-16 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 30px 30px;"></div>
+        <div class="relative z-10">
+          <h3 class="text-3xl font-bold text-pearl mb-4">Have a Project in Mind?</h3>
+          <p class="text-pearl/80 text-lg mb-8 max-w-2xl mx-auto">Contact us to discuss your requirements and get a free consultation.</p>
+          <a href="contact.html" class="inline-flex items-center gap-2 px-8 py-4 bg-pearl hover:bg-white text-navy rounded-full font-semibold transition-all hover:shadow-xl">
+            Get in Touch <i data-feather="arrow-right" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-navy text-pearl py-16">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      
+      <div>
+        <img src="/images/logo-large.png" class="h-16 mb-4 brightness-0 invert" alt="Nexon logo"/>
+        <p id="footerCompanyDescription" class="text-frost/80 leading-relaxed">
+          Nexon Engineering provides industrial repair, maintenance and automation solutions across residential, commercial and industrial projects.
+        </p>
+        <div class="flex gap-4 mt-6">
+          <a href="https://web.facebook.com/profile.php?id=61584696382140" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="facebook" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="linkedin" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="w-10 h-10 bg-white/10 hover:bg-royal rounded-full flex items-center justify-center transition-all hover:scale-110">
+            <i data-feather="instagram" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
+        <ul class="space-y-3">
+          <li><a href="about.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> About Us</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Services</a></li>
+          <li><a href="projects.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Projects</a></li>
+          <li><a href="contact.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chev-right" class="w-4 h-4"></i> Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Services</h3>
+        <ul class="space-y-3">
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Machine Repair</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Electrical Wiring</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Automation</a></li>
+          <li><a href="services.html" class="text-frost/80 hover:text-royal transition-colors flex items-center gap-2"><i data-feather="chevron-right" class="w-4 h-4"></i> Solar Installation</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-6">Contact Us</h3>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <i data-feather="map-pin" class="w-5 h-5 text-royal mt-1 flex-shrink-0"></i>
+            <span class="text-frost/80">WVP9+FGX, Colombo 01000, Sri Lanka</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <i data-feather="mail" class="w-5 h-5 text-royal mt-1 flex-shrink-0"></i>
+            <a href="mailto:nexonengineering.service@gmail.com" class="text-frost/80 hover:text-royal transition-colors">nexonengineering.service@gmail.com</a>
+          </div>
+          <div class="flex gap-3">
+            <i data-feather="phone" class="w-5 h-5 text-royal flex-shrink-0"></i>
+            <a href="tel:+94773753621" class="text-frost/80 hover:text-royal transition-colors">+94 77 375 3621</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="footerCopyright" class="text-center text-frost/60 mt-12 pt-8 border-t border-white/10">
+      © 2025 NEXON Engineering Services (Pvt) Ltd. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="/navigation.js"></script>
+  <script src="scripts.js"></script>
+  <script>
+    feather.replace();
+    
+    // Project filter functionality
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active state
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const filter = btn.getAttribute('data-filter');
+        
+        projectCards.forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            card.style.display = 'block';
+            card.classList.add('show');
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

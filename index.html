@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="description" content="Nexon Engineering - Professional engineering services, electrical installations, industrial wiring, CCTV, networking and automation solutions.">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NEXON Engineering Services — Home</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            frost: "#E1F5FE",
+            navy: "#0A2463",
+            indigo: "#3E5C76",
+            royal: "#1E88E5",
+            pearl: "#F8F9FA",
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes logoFloat {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-12px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes logoFadeIn {
+      0%   { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    #main-logo {
+      animation: logoFadeIn 1.8s ease-out forwards,
+                 logoFloat 4.5s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+
+    #main-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .nav-links a {
+      position: relative;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 6px 0;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #8FC1FA;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background-color: #8FC1FA;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    #mobile-menu a:hover {
+      color: #8FC1FA;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body class="bg-pearl font-sans antialiased">
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-transparent">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center group">
+        <div class="logo">
+          <img src="https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_68tq6v68tq6v68tqdfdsgfsg-Photoroom.png" alt="Nexon" class="h-12 transition-transform duration-300 group-hover:scale-110" />
+          <span class="company-name text-xs lg:text-lg text-pearl font-semibold ml-2">
+            NEXON ENGINEERING SERVICES (PVT) LTD
+          </span>
+        </div>
+      </a>
+
+      <div class="hidden md:flex space-x-8 text-pearl font-medium nav-links">
+        <a href="about.html" class="hover:text-[#8FC1FA]">About</a>
+        <a href="services.html" class="hover:text-[#8FC1FA]">Services</a>
+        <a href="projects.html" class="hover:text-[#8FC1FA]">Projects</a>
+        <a href="our-clients.html" class="hover:text-[#8FC1FA]">Our Clients</a>
+        <a href="contact.html" class="hover:text-[#8FC1FA]">Contact</a>
+      </div>
+
+      <a href="contact.html" class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-royal/80 hover:bg-royal text-pearl rounded-full text-sm font-medium transition-all duration-300 hover:shadow-lg hover:shadow-royal/30">
+        <i data-feather="phone" class="w-4 h-4"></i>
+        Get Quote
+      </a>
+
+      <button id="mobile-btn" class="md:hidden text-pearl p-2">
+        <i data-feather="menu"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden bg-navy/95 backdrop-blur-lg text-pearl px-6 py-6 space-y-4 md:hidden border-t border-white/10">
+      <a href="about.html" class="block">About</a>
+      <a href="services.html" class="block">Services</a>
+      <a href="projects.html" class="block">Projects</a>
+      <a href="our-clients.html" class="block">Our Clients</a>
+      <a href="contact.html" class="block">Contact</a>
+      <a href="contact.html" class="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-royal text-pearl rounded-full text-sm font-medium">
+        <i data-feather="phone" class="w-4 h-4"></i>
+        Get Quote
+      </a>
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+  <section class="relative h-screen flex items-center justify-center bg-gradient-to-b from-royal to-navy overflow-hidden">
+    <div class="absolute inset-0 opacity-20">
+      <div id="particles-js" class="w-full h-full"></div>
+    </div>
+
+    <div id="hero-content" class="text-center z-10 transition-all duration-500 pointer-events-none">
+      <img id="main-logo"
+           src="https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_hmrljuhmrljuhmrl-Photoroom1215.png"
+           alt="NEXON Logo"
+           class="w-80 mx-auto mb-8 logo-transition" />
+
+      <h1 class="text-5xl font-bold text-pearl mb-4">
+        Engineering Innovation with Precision
+      </h1>
+
+      <a href="services.html"
+         class="inline-block mt-8 px-8 py-3 bg-royal hover:bg-indigo text-pearl rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-royal/50 pointer-events-auto">
+        Explore More
+      </a>
+    </div>
+
+    <div class="absolute bottom-20 left-0 right-0 text-center animate-bounce">
+      <i data-feather="chevron-down" class="w-10 h-10 text-pearl mx-auto"></i>
+    </div>
+
+  </section>
+
+  <!-- STATS BAR -->
+  <section class="relative -mt-16 z-20 px-6">
+    <div class="max-w-5xl mx-auto bg-gradient-to-r from-navy via-[#0d2a6e] to-indigo rounded-3xl p-8 md:p-10 shadow-2xl border border-white/10">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
+        <div>
+          <div class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">50+</div>
+          <div class="text-pearl mt-2 text-base md:text-lg font-semibold">Projects Done</div>
+        </div>
+        <div>
+          <div class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">30+</div>
+          <div class="text-pearl mt-2 text-base md:text-lg font-semibold">Industrial Clients</div>
+        </div>
+        <div>
+          <div class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">8+</div>
+          <div class="text-pearl mt-2 text-base md:text-lg font-semibold">Years Experience</div>
+        </div>
+        <div>
+          <div class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">24/7</div>
+          <div class="text-pearl mt-2 text-base md:text-lg font-semibold">Emergency Support</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT PREVIEW -->
+  <section id="about-preview" class="py-16 bg-gradient-to-b from-navy to-indigo">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col lg:flex-row items-center">
+        <div class="lg:w-1/2 mb-10 lg:mb-0 fade-in-left">
+          <h2 class="text-4xl font-bold text-pearl mb-6">About NEXON Engineering</h2>
+          <p class="text-frost mb-6 text-lg leading-relaxed">Nexon Engineering is a trusted provider of industrial repair, maintenance, and automation services. We specialize in machine servicing, industrial electrical work, and custom engineering solutions designed to improve productivity and reliability....</p>
+          <a href="about.html" class="inline-block mt-2 text-royal hover:underline">For more information →</a>
+        </div>
+        <div class="lg:w-1/2 fade-in-right">
+          <img src="https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_e9zrb2e9zrb2e9zr12.png" alt="about image" class="rounded-xl shadow-2xl border-4 border-royal/50 w-full" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-navy text-pearl py-16">
+    <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+
+      <!-- Column 1: Logo & Description -->
+      <div class="md:-ml-52">
+        <img src="https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_hmrljuhmrljuhmrl-Photoroom.png"
+             class="h-20 mb-4" alt="Nexon logo"/>
+
+        <p class="text-frost leading-relaxed max-w-sm">
+          Nexon Engineering provides industrial repair, maintenance and automation
+          solutions across residential, commercial and industrial projects.
+          We deliver safe, dependable engineering services with an emphasis on
+          reliability and efficiency.
+        </p>
+      </div>
+
+      <!-- Column 2: Quick Links -->
+      <div class="md:ml-1">
+        <h3 class="text-xl text-pearl font-semibold underline mb-4">QUICK LINKS</h3>
+        <ul class="space-y-3 text-frost">
+          <li>› <a href="about.html" class="hover:text-royal">About Us</a></li>
+          <li>› <a href="services.html" class="hover:text-royal">Services</a></li>
+          <li>› <a href="projects.html" class="hover:text-royal">Projects</a></li>
+          <li>› <a href="contact.html" class="hover:text-royal">Contact</a></li>
+          <li>› <a href="privacy.html" class="hover:text-royal">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Contact -->
+      <div>
+        <h3 class="text-xl text-pearl font-semibold mb-4"><u>CONTACT US</u></h3>
+
+        <div class="space-y-4 text-frost">
+          <div class="flex gap-3">
+            <a href="https://www.google.com/maps/place/WVP9%2BFGX,+Colombo+01000"
+               target="_blank" class="hover:text-royal break-all flex items-center space-x-4">
+              <i data-feather="map-pin" class="text-royal"></i>
+              <span>WVP9+FGX, Colombo 01000,<br>Colombo 10, Sri Lanka</span>
+            </a>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <i data-feather="mail" class="text-royal mt-1"></i>
+            <a href="mailto:nexonengineering.service@gmail.com"
+               class="hover:text-royal break-all">
+              nexonengineering.service@gmail.com
+            </a>
+          </div>
+
+          <div class="flex gap-3">
+            <i data-feather="phone" class="text-royal"></i>
+            <a href="tel:+94773753621" class="hover:text-royal">
+              +94 77 375 3621
+            </a>
+          </div>
+
+          <div class="flex gap-4 mt-4">
+            <a href="https://web.facebook.com/profile.php?id=61584696382140" class="hover:text-royal"><i data-feather="facebook"></i></a>
+            <a href="#" class="hover:text-royal"><i data-feather="linkedin"></i></a>
+            <a href="#" class="hover:text-royal"><i data-feather="instagram"></i></a>
+            <a href="#" class="hover:text-royal"><i data-feather="youtube"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 4: Facebook -->
+      <div class="footer-col facebook">
+        <h3 class="text-xl text-pearl font-semibold mb-4">FACEBOOK</h3>
+
+        <iframe
+          src="https://www.facebook.com/plugins/page.php?href=https://web.facebook.com/profile.php?id=61584696382140&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true"
+          width="340"
+          height="500"
+          style="border:none; overflow:hidden"
+          scrolling="no"
+          frameborder="0"
+          allowfullscreen="true"
+          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+        </iframe>
+      </div>
+
+    </div>
+
+    <div class="text-center text-frost mt-12 border-t border-white/10 pt-6">
+      © 2025 NEXON Engineering Services (Pvt) Ltd. All rights reserved.
+    </div>
+  </footer>
+
+
+  <div class="whatsapp-float">
+    <div class="whatsapp-text">Talk to an expert</div>
+    <a href="https://wa.me/+94773753621" target="_blank" class="whatsapp-btn">
+      <img src="https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/whatsapp-vector-logo-icon-logotype-vector-social-media_901408-406-removebg-preview.png" alt="WhatsApp">
+    </a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="scripts.js"></script>
+  <script>feather.replace();</script>
+</body>
+</html>
