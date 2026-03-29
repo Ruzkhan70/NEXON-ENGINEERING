@@ -519,11 +519,11 @@
         { id: '6', name: 'Client 6', logo: 'images/client-6.png', website: '' }
       ],
       messages: [],
-      version: 2
+      version: 3
     };
 
     let data = JSON.parse(localStorage.getItem('nexon_admin_data'));
-    if (!data || data.version !== 2) {
+    if (!data || data.version !== 3 || !data.projects || data.projects.length < 9) {
       data = JSON.parse(JSON.stringify(DEFAULT_DATA));
       localStorage.setItem('nexon_admin_data', JSON.stringify(data));
     }
