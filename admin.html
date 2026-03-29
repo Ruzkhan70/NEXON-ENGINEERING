@@ -79,14 +79,14 @@
     };
 
     const DEFAULT_SERVICES = [
-      { id: 1, title: "Industrial Motor Repair", description: "Complete rewinding, repair and overhaul of AC/DC industrial motors of all sizes.", icon: "⚙️", visible: true },
-      { id: 2, title: "Electrical Panel Installation", description: "Design and installation of MCC, PCC and distribution panels for industrial use.", icon: "⚡", visible: true },
-      { id: 3, title: "PLC & Automation", description: "PLC programming, SCADA setup and full automation solutions for production lines.", icon: "🤖", visible: true },
-      { id: 4, title: "Preventive Maintenance", description: "Scheduled maintenance programs to maximise uptime and equipment longevity.", icon: "🔧", visible: true },
-      { id: 5, title: "Solar Installation", description: "Rooftop and ground-mounted solar systems with battery backup solutions.", icon: "☀️", visible: true },
-      { id: 6, title: "CCTV & Security", description: "IP camera installation, NVR setup and remote monitoring systems.", icon: "📹", visible: true },
-      { id: 7, title: "Machine Servicing", description: "Comprehensive machine maintenance and breakdown services for all industrial equipment.", icon: "🏭", visible: true },
-      { id: 8, title: "Industrial Wiring", description: "Complete electrical wiring solutions for factories, warehouses and commercial buildings.", icon: "🔌", visible: true },
+      { id: 1, title: "Industrial Motor Repair", description: "Complete rewinding, repair and overhaul of AC/DC industrial motors of all sizes.", icon: "⚙️", image: "images/service-machine-repair.png", visible: true },
+      { id: 2, title: "Electrical Panel Installation", description: "Design and installation of MCC, PCC and distribution panels for industrial use.", icon: "⚡", image: "images/service-electrical-wiring.png", visible: true },
+      { id: 3, title: "PLC & Automation", description: "PLC programming, SCADA setup and full automation solutions for production lines.", icon: "🤖", image: "images/service-automation.png", visible: true },
+      { id: 4, title: "Preventive Maintenance", description: "Scheduled maintenance programs to maximise uptime and equipment longevity.", icon: "🔧", image: "images/service-electronics.png", visible: true },
+      { id: 5, title: "Solar Installation", description: "Rooftop and ground-mounted solar systems with battery backup solutions.", icon: "☀️", image: "images/service-solar.jpg", visible: true },
+      { id: 6, title: "CCTV & Security", description: "IP camera installation, NVR setup and remote monitoring systems.", icon: "📹", image: "images/service-cctv.png", visible: true },
+      { id: 7, title: "Machine Servicing", description: "Comprehensive machine maintenance and breakdown services for all industrial equipment.", icon: "🏭", image: "images/service-fabrication.png", visible: true },
+      { id: 8, title: "Industrial Wiring", description: "Complete electrical wiring solutions for factories, warehouses and commercial buildings.", icon: "🔌", image: "images/service-industrial.png", visible: true },
     ];
 
     const DEFAULT_PROJECTS = [
@@ -609,10 +609,10 @@
     // Services Tab
     function ServicesTab({ services, setServices, showToast }) {
       const [modal, setModal] = useState(null);
-      const [form, setForm] = useState({ title: "", description: "", icon: "⚙️", visible: true });
+      const [form, setForm] = useState({ title: "", description: "", icon: "⚙️", image: "", visible: true });
       const ICONS = ["⚙️","⚡","🔧","🤖","🏭","🔌","☀️","📹","🔬","📐","💡","🔩","🔋","🌡️","📡","🏗️"];
 
-      const openAdd = () => { setForm({ title: "", description: "", icon: "⚙️", visible: true }); setModal({ mode: "add" }); };
+      const openAdd = () => { setForm({ title: "", description: "", icon: "⚙️", image: "", visible: true }); setModal({ mode: "add" }); };
       const openEdit = (s) => { setForm(s); setModal({ mode: "edit", id: s.id }); };
 
       const saveService = () => {
@@ -635,10 +635,17 @@
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 20 }}>
             {services.map(s => (
               <Card key={s.id} style={{ position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "absolute", top: 16, right: 16 }}>
+                <div style={{ position: "absolute", top: 16, right: 16, zIndex: 10 }}>
                   <span style={{ fontSize: 10, fontWeight: 700, borderRadius: 20, padding: "3px 9px", background: s.visible ? "rgba(52,211,153,0.15)" : "rgba(248,113,113,0.1)", color: s.visible ? "#34d399" : "#f87171", border: `1px solid ${s.visible ? "rgba(52,211,153,0.3)" : "rgba(248,113,113,0.2)"}` }}>{s.visible ? "ON" : "OFF"}</span>
                 </div>
-                <div style={{ fontSize: 40, marginBottom: 14, lineHeight: 1 }}>{s.icon}</div>
+                {s.image ? (
+                  <div style={{ height: 140, marginBottom: 14, borderRadius: 8, overflow: "hidden", background: "#0a1628" }}>
+                    <img src={s.image} alt={s.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling && (e.target.nextSibling.style.display = 'flex'); }} />
+                    <div style={{ display: 'none', height: "100%", alignItems: "center", justifyContent: "center", fontSize: 40 }}>{s.icon}</div>
+                  </div>
+                ) : (
+                  <div style={{ fontSize: 40, marginBottom: 14, lineHeight: 1 }}>{s.icon}</div>
+                )}
                 <h4 style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 16, marginBottom: 8 }}>{s.title}</h4>
                 <p style={{ color: "#64748b", fontSize: 13, lineHeight: 1.6, marginBottom: 20, minHeight: 40 }}>{s.description}</p>
                 <div style={{ display: "flex", gap: 8 }}>
@@ -652,8 +659,9 @@
 
           {modal && (
             <Modal title={modal.mode === "add" ? "Add New Service" : "Edit Service"} onClose={() => setModal(null)}>
-              <div style={{ marginBottom: 16 }}>
-                <label style={{ display: "block", color: "#94a3b8", fontSize: 12, fontWeight: 600, marginBottom: 8, textTransform: "uppercase" }}>Service Icon</label>
+              <ImageUpload label="Service Image" value={form.image} onChange={v => setForm(f => ({ ...f, image: v }))} previewHeight={120} />
+              <div style={{ marginBottom: 16, marginTop: 16 }}>
+                <label style={{ display: "block", color: "#94a3b8", fontSize: 12, fontWeight: 600, marginBottom: 8, textTransform: "uppercase" }}>Service Icon (fallback)</label>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, background: "#0a1628", borderRadius: 10, padding: 12, border: "1px solid #1e3a5f" }}>
                   {ICONS.map(ic => (
                     <button key={ic} onClick={() => setForm(f => ({ ...f, icon: ic }))} style={{ width: 42, height: 42, borderRadius: 8, border: `2px solid ${form.icon === ic ? "#00b4d8" : "transparent"}`, background: form.icon === ic ? "rgba(0,180,216,0.2)" : "rgba(30,58,95,0.4)", fontSize: 20, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>{ic}</button>
