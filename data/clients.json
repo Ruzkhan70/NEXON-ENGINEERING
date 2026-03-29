@@ -1,0 +1,56 @@
+[
+  {
+    "_id": "client1",
+    "name": "Corporate Partner 1",
+    "logo": "/images/client-1.png",
+    "description": "Trusted corporate partner",
+    "website": "",
+    "featured": true,
+    "createdAt": "2024-01-01T10:00:00.000Z"
+  },
+  {
+    "_id": "client2",
+    "name": "Corporate Partner 2",
+    "logo": "/images/client-2.png",
+    "description": "Trusted corporate partner",
+    "website": "",
+    "featured": true,
+    "createdAt": "2024-01-01T10:00:00.000Z"
+  },
+  {
+    "_id": "client3",
+    "name": "Corporate Partner 3",
+    "logo": "/images/client-3.png",
+    "description": "Trusted corporate partner",
+    "website": "",
+    "featured": true,
+    "createdAt": "2024-01-01T10:00:00.000Z"
+  },
+  {
+    "_id": "client4",
+    "name": "Corporate Partner 4",
+    "logo": "/images/client-4.png",
+    "description": "Trusted corporate partner",
+    "website": "",
+    "featured": true,
+    "createdAt": "2024-01-01T10:00:00.000Z"
+  },
+  {
+    "_id": "client5",
+    "name": "Corporate Partner 5",
+    "logo": "/images/client-5.png",
+    "description": "Trusted corporate partner",
+    "website": "",
+    "featured": true,
+    "createdAt": "2024-01-01T10:00:00.000Z"
+  },
+  {
+    "_id": "client6",
+    "name": "Corporate Partner 6",
+    "logo": "/images/client-6.png",
+    "description": "Trusted corporate partner",
+    "website": "",
+    "featured": true,
+    "createdAt": "2024-01-01T10:00:00.000Z"
+  }
+]
