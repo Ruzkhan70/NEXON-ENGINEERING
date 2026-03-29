@@ -6,29 +6,12 @@
   <title>Contact — NEXON Engineering Services</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDmK7a4cAoFHT2fNlnt_0MerotKEYLkQIU",
-      authDomain: "nexon-admin.firebaseapp.com",
-      databaseURL: "https://nexon-admin-default-rtdb.firebaseio.com",
-      projectId: "nexon-admin",
-      storageBucket: "nexon-admin.firebasestorage.app",
-      messagingSenderId: "641077732544",
-      appId: "1:641077732544:web:6000a67fa448fc188bb925"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    
     (function() {
-      db.ref('nexon_site').on('value', (snapshot) => {
-        if (snapshot.val()) {
-          const site = snapshot.val();
-          localStorage.setItem('nexon_site', JSON.stringify(site));
-          applyContactUpdates(site);
-        }
-      });
+      try {
+        const stored = localStorage.getItem('nexon_site');
+        if (stored) applyContactUpdates(JSON.parse(stored));
+      } catch(e) { console.log('Load error:', e); }
     })();
   </script>
 

@@ -45,13 +45,15 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
-    // Password Hashing
-    async function hashPassword(password) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(password + "nexon_salt_2025");
-      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+    // Password Hashing (simplified)
+    function hashPassword(password) {
+      let hash = 0;
+      for (let i = 0; i < password.length; i++) {
+        const char = password.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return "hash" + Math.abs(hash);
     }
 
     // Default Data with Website Content
@@ -67,6 +69,7 @@
         instagram: "",
         address: "WVP9+FGX, Colombo 01000, Colombo 10, Sri Lanka",
         mapsUrl: "",
+        locationVisible: true,
       },
       pages: {
         home: { visible: true, heroTitle: "Engineering Innovation with Precision", heroSubtitle: "Industrial repair, maintenance, and automation services.", heroImage: "https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_hmrljuhmrljuhmrl-Photoroom1215.png", aboutTitle: "About NEXON Engineering", aboutText: "Nexon Engineering is a trusted provider of industrial repair, maintenance, and automation services.", aboutImage: "https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_e9zrb2e9zrb2e9zr12.png" },
@@ -79,14 +82,14 @@
     };
 
     const DEFAULT_SERVICES = [
-      { id: 1, title: "Industrial Motor Repair", description: "Complete rewinding, repair and overhaul of AC/DC industrial motors of all sizes.", icon: "⚙️", visible: true },
-      { id: 2, title: "Electrical Panel Installation", description: "Design and installation of MCC, PCC and distribution panels for industrial use.", icon: "⚡", visible: true },
-      { id: 3, title: "PLC & Automation", description: "PLC programming, SCADA setup and full automation solutions for production lines.", icon: "🤖", visible: true },
-      { id: 4, title: "Preventive Maintenance", description: "Scheduled maintenance programs to maximise uptime and equipment longevity.", icon: "🔧", visible: true },
-      { id: 5, title: "Solar Installation", description: "Rooftop and ground-mounted solar systems with battery backup solutions.", icon: "☀️", visible: true },
-      { id: 6, title: "CCTV & Security", description: "IP camera installation, NVR setup and remote monitoring systems.", icon: "📹", visible: true },
-      { id: 7, title: "Machine Servicing", description: "Comprehensive machine maintenance and breakdown services for all industrial equipment.", icon: "🏭", visible: true },
-      { id: 8, title: "Industrial Wiring", description: "Complete electrical wiring solutions for factories, warehouses and commercial buildings.", icon: "🔌", visible: true },
+      { id: 1, title: "Industrial Motor Repair", description: "Complete rewinding, repair and overhaul of AC/DC industrial motors of all sizes.", icon: "⚙️", image: "images/service-machine-repair.png", category: "electrical", visible: true },
+      { id: 2, title: "Electrical Panel Installation", description: "Design and installation of MCC, PCC and distribution panels for industrial use.", icon: "⚡", image: "images/service-electrical-wiring.png", category: "electrical", visible: true },
+      { id: 3, title: "PLC & Automation", description: "PLC programming, SCADA setup and full automation solutions for production lines.", icon: "🤖", image: "images/service-automation.png", category: "automation", visible: true },
+      { id: 4, title: "Preventive Maintenance", description: "Scheduled maintenance programs to maximise uptime and equipment longevity.", icon: "🔧", image: "images/service-electronics.png", category: "industrial", visible: true },
+      { id: 5, title: "Solar Installation", description: "Rooftop and ground-mounted solar systems with battery backup solutions.", icon: "☀️", image: "images/service-solar.jpg", category: "solar", visible: true },
+      { id: 6, title: "CCTV & Security", description: "IP camera installation, NVR setup and remote monitoring systems.", icon: "📹", image: "images/service-cctv.png", category: "security", visible: true },
+      { id: 7, title: "Machine Servicing", description: "Comprehensive machine maintenance and breakdown services for all industrial equipment.", icon: "🏭", image: "images/service-fabrication.png", category: "industrial", visible: true },
+      { id: 8, title: "Industrial Wiring", description: "Complete electrical wiring solutions for factories, warehouses and commercial buildings.", icon: "🔌", image: "images/service-industrial.png", category: "electrical", visible: true },
     ];
 
     const DEFAULT_PROJECTS = [
@@ -113,20 +116,38 @@
     const DEFAULT_MESSAGES = [];
 
     // Storage Helpers
-    const DATA_VERSION = 2;
+    const DATA_VERSION = 3;
     const load = (key, def) => { 
       try { 
         const v = localStorage.getItem(key); 
         const data = v ? JSON.parse(v) : null;
-        // Force reset if no data or old version
-        if (!data || (key === 'nexon_site' && !data._version)) {
+        const isArray = Array.isArray(def);
+        if (!data) {
           localStorage.setItem(key, JSON.stringify({...def, _version: DATA_VERSION}));
           return {...def, _version: DATA_VERSION};
         }
+        if (isArray && !Array.isArray(data)) {
+          localStorage.setItem(key, JSON.stringify({...def, _version: DATA_VERSION}));
+          return {...def, _version: DATA_VERSION};
+        }
+        // Check if services array has images and categories - reset if not
+        if (key === "nexon_services" && Array.isArray(data)) {
+          const hasImages = data.some(s => s.image);
+          const hasCategories = data.some(s => s.category);
+          if (!hasImages || !hasCategories) {
+            localStorage.setItem(key, JSON.stringify({...def, _version: DATA_VERSION}));
+            return {...def, _version: DATA_VERSION};
+          }
+        }
         return data;
-      } catch { return def; } 
+      } catch { 
+        localStorage.setItem(key, JSON.stringify({...def, _version: DATA_VERSION}));
+        return {...def, _version: DATA_VERSION};
+      } 
     };
-    const save = (key, val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} };
+    const save = (key, val) => { 
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch {} 
+    };
 
     // Icons
     const Icon = ({ name, size = 18, className = "" }) => {
@@ -315,19 +336,17 @@
       const [pass, setPass] = useState("");
       const [error, setError] = useState("");
       const [loading, setLoading] = useState(false);
-      const [showPass, setShowPass] = useState(false);
 
-      const handleLogin = async () => {
+      const handleLogin = () => {
         if (!user || !pass) { setError("Please enter credentials"); return; }
         setLoading(true); setError("");
-        const hash = await hashPassword(pass);
-        const stored = load("nexon_credentials", { username: "admin", hash: "aa28d6e3b8d8c0c7c25a276094af8ed1667d265bc20ef3239341fb2dff646933" });
-        await new Promise(r => setTimeout(r, 600));
-        if (user === stored.username && hash === stored.hash) {
+        
+        if (user === "admin" && pass === "nexon2025") {
           save("nexon_session", { user, time: Date.now() });
           onLogin();
         } else {
           setError("Invalid username or password");
+          setLoading(false);
         }
         setLoading(false);
       };
@@ -338,26 +357,21 @@
           <div className="glow-orb" style={{ width: 300, height: 300, background: "#00b4d8", bottom: -80, left: -80 }} />
           <div style={{ width: "100%", maxWidth: 440, padding: 20, position: "relative", zIndex: 1 }}>
             <div style={{ textAlign: "center", marginBottom: 36 }}>
-              <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 72, height: 72, borderRadius: 20, background: "linear-gradient(135deg,#0077b6,#00b4d8)", marginBottom: 20, boxShadow: "0 12px 40px rgba(0,119,182,0.4)", animation: "float 3s ease-in-out infinite" }}>
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" /></svg>
+              <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 80, height: 80, borderRadius: 20, background: "#fff", marginBottom: 20, boxShadow: "0 12px 40px rgba(0,119,182,0.4)", animation: "float 3s ease-in-out infinite", overflow: "hidden" }}>
+                <img src="https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_hmrljuhmrljuhmrl-Photoroom1215.png" alt="Logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
               </div>
               <h1 style={{ color: "#e2e8f0", fontSize: 28, fontWeight: 800, margin: 0, marginBottom: 6 }}>Nexon Admin</h1>
               <p style={{ color: "#64748b", fontSize: 14, margin: 0 }}>Content Management System</p>
             </div>
             <Card style={{ padding: 32 }}>
               <Field label="Username" value={user} onChange={setUser} placeholder="admin" />
-              <div style={{ position: "relative" }}>
-                <Field label="Password" value={pass} onChange={setPass} type={showPass ? "text" : "password"} placeholder="Enter password" />
-                <button onClick={() => setShowPass(v => !v)} style={{ position: "absolute", right: 12, top: 30, background: "none", border: "none", color: "#64748b", cursor: "pointer", padding: 0 }}>
-                  <Icon name={showPass ? "eyeOff" : "eye"} size={16} />
-                </button>
-              </div>
+              <Field label="Password" value={pass} onChange={setPass} type="password" placeholder="Enter password" />
               {error && <p style={{ color: "#f87171", fontSize: 13, marginBottom: 16, padding: "10px 14px", background: "rgba(248,113,113,0.1)", borderRadius: 8, border: "1px solid rgba(248,113,113,0.2)" }}>⚠ {error}</p>}
               <button onClick={handleLogin} disabled={loading} style={{ width: "100%", padding: "14px", background: loading ? "#1e3a5f" : "linear-gradient(135deg,#0077b6,#00b4d8)", color: "#fff", border: "none", borderRadius: 10, fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: 15, cursor: loading ? "not-allowed" : "pointer", letterSpacing: "0.02em" }}>
                 {loading ? "Authenticating..." : "Sign In →"}
               </button>
               <p style={{ color: "#475569", fontSize: 12, textAlign: "center", marginTop: 20, marginBottom: 0 }}>
-                Demo: <strong style={{ color: "#64748b" }}>admin</strong> / <strong style={{ color: "#64748b" }}>nexon2025</strong>
+                Username: <strong style={{ color: "#64748b" }}>admin</strong> / Password: <strong style={{ color: "#64748b" }}>nexon2025</strong>
               </p>
             </Card>
           </div>
@@ -376,15 +390,85 @@
         const s = load("nexon_session", null);
         return s && (Date.now() - s.time < 8 * 3600000);
       });
+      
       const [activeTab, setActiveTab] = useState("dashboard");
       const [sidebarOpen, setSidebarOpen] = useState(true);
       const [toast, setToast] = useState(null);
       const [site, setSite] = useState(() => load("nexon_site", DEFAULT_SITE));
-      const [projects, setProjects] = useState(() => load("nexon_projects", DEFAULT_PROJECTS));
-      const [clients, setClients] = useState(() => load("nexon_clients", DEFAULT_CLIENTS));
-      const [messages, setMessages] = useState(() => load("nexon_messages", DEFAULT_MESSAGES));
-      const [services, setServices] = useState(() => load("nexon_services", DEFAULT_SERVICES));
+      const [projects, setProjects] = useState(() => {
+        const data = load("nexon_projects", DEFAULT_PROJECTS);
+        return Array.isArray(data) ? data : DEFAULT_PROJECTS;
+      });
+      const [clients, setClients] = useState(() => {
+        const data = load("nexon_clients", DEFAULT_CLIENTS);
+        return Array.isArray(data) ? data : DEFAULT_CLIENTS;
+      });
+      const [messages, setMessages] = useState(() => {
+        const data = load("nexon_messages", DEFAULT_MESSAGES);
+        return Array.isArray(data) ? data : DEFAULT_MESSAGES;
+      });
+      const [services, setServices] = useState(() => {
+        const data = load("nexon_services", DEFAULT_SERVICES);
+        return Array.isArray(data) ? data : DEFAULT_SERVICES;
+      });
       const [credentials, setCredentials] = useState(() => load("nexon_credentials", { username: "admin", hash: "aa28d6e3b8d8c0c7c25a276094af8ed1667d265bc20ef3239341fb2dff646933" }));
+      
+      // Auto-logout after 2 minutes of inactivity
+      const [logoutWarning, setLogoutWarning] = useState(false);
+      const [logoutCountdown, setLogoutCountdown] = useState(30);
+      
+      useEffect(() => {
+        if (!authed) return;
+        let idleTimer, warningTimer, countdownInterval;
+        
+        const resetTimer = () => {
+          clearTimeout(idleTimer);
+          clearTimeout(warningTimer);
+          clearInterval(countdownInterval);
+          setLogoutWarning(false);
+          setLogoutCountdown(30);
+          
+          // Show warning after 90 seconds (1.5 min of 2 min total)
+          warningTimer = setTimeout(() => {
+            setLogoutWarning(true);
+            setLogoutCountdown(30);
+            countdownInterval = setInterval(() => {
+              setLogoutCountdown(prev => {
+                if (prev <= 1) {
+                  clearInterval(countdownInterval);
+                  localStorage.removeItem("nexon_session");
+                  setAuthed(false);
+                  return 0;
+                }
+                return prev - 1;
+              });
+            }, 1000);
+          }, 90000); // 90 seconds = 1.5 minutes
+          
+          // Auto logout after 2 minutes
+          idleTimer = setTimeout(() => {
+            clearInterval(countdownInterval);
+            localStorage.removeItem("nexon_session");
+            setAuthed(false);
+          }, 120000); // 2 minutes
+        };
+        
+        const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+        events.forEach(e => window.addEventListener(e, resetTimer));
+        resetTimer();
+        
+        return () => {
+          clearTimeout(idleTimer);
+          clearTimeout(warningTimer);
+          clearInterval(countdownInterval);
+          events.forEach(e => window.removeEventListener(e, resetTimer));
+        };
+      }, [authed]);
+
+      const stayLoggedIn = () => {
+        setLogoutWarning(false);
+        setLogoutCountdown(30);
+      };
 
       const showToast = (msg) => setToast(msg);
       const persistSite = (s) => { setSite(s); save("nexon_site", s); };
@@ -393,9 +477,31 @@
       const persistMessages = (m) => { setMessages(m); save("nexon_messages", m); };
       const persistServices = (s) => { setServices(s); save("nexon_services", s); };
       const persistCredentials = (c) => { setCredentials(c); save("nexon_credentials", c); };
-      const logout = () => { localStorage.removeItem("nexon_session"); setAuthed(false); };
+      const logout = () => { 
+        localStorage.removeItem("nexon_session"); 
+        setAuthed(false); 
+      };
 
       if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
+
+      // Logout warning modal
+      if (logoutWarning) {
+        return (
+          <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999 }}>
+            <div style={{ background: "#0f172a", borderRadius: 16, padding: 32, maxWidth: 400, width: "90%", textAlign: "center", border: "1px solid #1e3a5f" }}>
+              <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(248,113,113,0.2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+              </div>
+              <h3 style={{ color: "#f87171", fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Session Expiring</h3>
+              <p style={{ color: "#94a3b8", marginBottom: 24, lineHeight: 1.6 }}>You will be logged out in <span style={{ color: "#00b4d8", fontWeight: 700 }}>{logoutCountdown}</span> seconds due to inactivity.</p>
+              <div style={{ display: "flex", gap: 12 }}>
+                <button onClick={stayLoggedIn} style={{ flex: 1, padding: "12px 20px", borderRadius: 10, border: "1px solid #1e3a5f", background: "rgba(30,58,95,0.5)", color: "#e2e8f0", fontWeight: 600, cursor: "pointer" }}>Stay Logged In</button>
+                <button onClick={logout} style={{ flex: 1, padding: "12px 20px", borderRadius: 10, border: "none", background: "#ef4444", color: "#fff", fontWeight: 600, cursor: "pointer" }}>Log Out</button>
+              </div>
+            </div>
+          </div>
+        );
+      }
 
       const unreadCount = messages.filter(m => !m.read).length;
       const navItems = [
@@ -589,10 +695,10 @@
     // Services Tab
     function ServicesTab({ services, setServices, showToast }) {
       const [modal, setModal] = useState(null);
-      const [form, setForm] = useState({ title: "", description: "", icon: "⚙️", visible: true });
+      const [form, setForm] = useState({ title: "", description: "", icon: "⚙️", image: "", visible: true });
       const ICONS = ["⚙️","⚡","🔧","🤖","🏭","🔌","☀️","📹","🔬","📐","💡","🔩","🔋","🌡️","📡","🏗️"];
 
-      const openAdd = () => { setForm({ title: "", description: "", icon: "⚙️", visible: true }); setModal({ mode: "add" }); };
+      const openAdd = () => { setForm({ title: "", description: "", icon: "⚙️", image: "", visible: true }); setModal({ mode: "add" }); };
       const openEdit = (s) => { setForm(s); setModal({ mode: "edit", id: s.id }); };
 
       const saveService = () => {
@@ -615,10 +721,17 @@
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 20 }}>
             {services.map(s => (
               <Card key={s.id} style={{ position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "absolute", top: 16, right: 16 }}>
+                <div style={{ position: "absolute", top: 16, right: 16, zIndex: 10 }}>
                   <span style={{ fontSize: 10, fontWeight: 700, borderRadius: 20, padding: "3px 9px", background: s.visible ? "rgba(52,211,153,0.15)" : "rgba(248,113,113,0.1)", color: s.visible ? "#34d399" : "#f87171", border: `1px solid ${s.visible ? "rgba(52,211,153,0.3)" : "rgba(248,113,113,0.2)"}` }}>{s.visible ? "ON" : "OFF"}</span>
                 </div>
-                <div style={{ fontSize: 40, marginBottom: 14, lineHeight: 1 }}>{s.icon}</div>
+                {s.image ? (
+                  <div style={{ height: 140, marginBottom: 14, borderRadius: 8, overflow: "hidden", background: "#0a1628" }}>
+                    <img src={s.image} alt={s.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling && (e.target.nextSibling.style.display = 'flex'); }} />
+                    <div style={{ display: 'none', height: "100%", alignItems: "center", justifyContent: "center", fontSize: 40 }}>{s.icon}</div>
+                  </div>
+                ) : (
+                  <div style={{ fontSize: 40, marginBottom: 14, lineHeight: 1 }}>{s.icon}</div>
+                )}
                 <h4 style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 16, marginBottom: 8 }}>{s.title}</h4>
                 <p style={{ color: "#64748b", fontSize: 13, lineHeight: 1.6, marginBottom: 20, minHeight: 40 }}>{s.description}</p>
                 <div style={{ display: "flex", gap: 8 }}>
@@ -632,8 +745,9 @@
 
           {modal && (
             <Modal title={modal.mode === "add" ? "Add New Service" : "Edit Service"} onClose={() => setModal(null)}>
-              <div style={{ marginBottom: 16 }}>
-                <label style={{ display: "block", color: "#94a3b8", fontSize: 12, fontWeight: 600, marginBottom: 8, textTransform: "uppercase" }}>Service Icon</label>
+              <ImageUpload label="Service Image" value={form.image} onChange={v => setForm(f => ({ ...f, image: v }))} previewHeight={120} />
+              <div style={{ marginBottom: 16, marginTop: 16 }}>
+                <label style={{ display: "block", color: "#94a3b8", fontSize: 12, fontWeight: 600, marginBottom: 8, textTransform: "uppercase" }}>Service Icon (fallback)</label>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, background: "#0a1628", borderRadius: 10, padding: 12, border: "1px solid #1e3a5f" }}>
                   {ICONS.map(ic => (
                     <button key={ic} onClick={() => setForm(f => ({ ...f, icon: ic }))} style={{ width: 42, height: 42, borderRadius: 8, border: `2px solid ${form.icon === ic ? "#00b4d8" : "transparent"}`, background: form.icon === ic ? "rgba(0,180,216,0.2)" : "rgba(30,58,95,0.4)", fontSize: 20, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>{ic}</button>
@@ -882,16 +996,14 @@
         });
       };
 
-      const saveCredentials = async () => {
+      const saveCredentials = () => {
         setCredError("");
         if (!newUsername.trim()) { setCredError("Username cannot be empty."); return; }
         if (!currentPass) { setCredError("Please enter your current password to confirm changes."); return; }
-        const currentHash = await hashPassword(currentPass);
-        if (currentHash !== credentials.hash) { setCredError("Current password is incorrect."); return; }
+        if (currentPass !== "nexon2025") { setCredError("Current password is incorrect."); return; }
         if (newPass && newPass.length < 6) { setCredError("New password must be at least 6 characters."); return; }
         if (newPass && newPass !== confirmPass) { setCredError("New passwords do not match."); return; }
-        const newHash = newPass ? await hashPassword(newPass) : credentials.hash;
-        setCredentials({ username: newUsername.trim(), hash: newHash });
+        setCredentials({ username: newUsername.trim(), hash: newPass ? hashPassword(newPass) : credentials.hash });
         setCurrentPass(""); setNewPass(""); setConfirmPass("");
         showToast("Account credentials updated! 🔐");
       };
@@ -927,6 +1039,13 @@
                 <Field label="Instagram URL" value={local.contact.instagram} onChange={v => upd("contact.instagram", v)} />
               </div>
               <Field label="Address" value={local.contact.address} onChange={v => upd("contact.address", v)} rows={2} />
+              <div style={{ marginTop: 16, padding: "16px", background: "#0f172a", borderRadius: 12, border: "1px solid #1e3a5f", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div>
+                  <span style={{ color: "#e2e8f0", fontWeight: 600, display: "block", marginBottom: 4 }}>Google Map Location</span>
+                  <span style={{ color: "#64748b", fontSize: 12 }}>Show/hide the map on contact page</span>
+                </div>
+                <Toggle checked={local.contact.locationVisible} onChange={() => upd("contact.locationVisible", !local.contact.locationVisible)} />
+              </div>
               <button className="btn-primary" onClick={() => saveSite("Contact")}><Icon name="save" size={14} /> Save Contact Info</button>
             </Card>
             <Card>
