@@ -339,15 +339,15 @@
         <div class="space-y-4">
           <div class="flex items-start gap-3 location-address">
             <i data-feather="map-pin" class="w-5 h-5 text-royal mt-1 flex-shrink-0"></i>
-            <span class="text-frost/80">WVP9+FGX, Colombo 01000, Sri Lanka</span>
+            <span class="text-frost/80" data-contact="address">WVP9+FGX, Colombo 01000, Sri Lanka</span>
           </div>
           <div class="flex items-start gap-3">
             <i data-feather="mail" class="w-5 h-5 text-royal mt-1 flex-shrink-0"></i>
-            <a href="mailto:nexonengineering.service@gmail.com" class="text-frost/80 hover:text-royal transition-colors">nexonengineering.service@gmail.com</a>
+            <a href="mailto:nexonengineering.service@gmail.com" class="text-frost/80 hover:text-royal transition-colors" data-contact="email">nexonengineering.service@gmail.com</a>
           </div>
           <div class="flex gap-3">
             <i data-feather="phone" class="w-5 h-5 text-royal flex-shrink-0"></i>
-            <a href="tel:+94773753621" class="text-frost/80 hover:text-royal transition-colors">+94 77 375 3621</a>
+            <a href="tel:+94773753621" class="text-frost/80 hover:text-royal transition-colors" data-contact="phone">+94 77 375 3621</a>
           </div>
         </div>
       </div>
@@ -418,20 +418,42 @@
       document.getElementById('success-popup').classList.add('hidden');
     }
     
-    // Check location visibility from admin settings
+    // Check location visibility and sync contact info from admin settings
     (function() {
       try {
         const stored = localStorage.getItem('nexon_site');
-        if (stored) {
-          const site = JSON.parse(stored);
-          if (site.contact && site.contact.locationVisible === false) {
-            const mapSection = document.querySelector('.map-section');
-            const addressSection = document.querySelector('.location-address');
-            if (mapSection) mapSection.style.display = 'none';
-            if (addressSection) addressSection.style.display = 'none';
+        if (!stored) return;
+        const site = JSON.parse(stored);
+        
+        // Update contact info
+        if (site.contact) {
+          if (site.contact.phone) {
+            const phoneEl = document.querySelector('[data-contact="phone"]');
+            if (phoneEl) { phoneEl.textContent = site.contact.phone; phoneEl.href = 'tel:' + site.contact.phone.replace(/\s/g, ''); }
+          }
+          if (site.contact.email) {
+            const emailEl = document.querySelector('[data-contact="email"]');
+            if (emailEl) { emailEl.textContent = site.contact.email; emailEl.href = 'mailto:' + site.contact.email; }
+          }
+          if (site.contact.address) {
+            const addrEl = document.querySelector('[data-contact="address"]');
+            if (addrEl) addrEl.textContent = site.contact.address;
           }
         }
-      } catch(e) {}
+        
+        // Update location visibility
+        if (site.contact && site.contact.locationVisible === false) {
+          const mapSection = document.querySelector('.map-section');
+          const addressSection = document.querySelector('.location-address');
+          if (mapSection) mapSection.style.display = 'none';
+          if (addressSection) addressSection.style.display = 'none';
+        }
+        
+        // Check page visibility
+        if (site.pages && site.pages.contact === false) {
+          document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;min-height:100vh;background:#0a2463;color:#fff;font-family:sans-serif;"><p>Page under maintenance</p></div>';
+        }
+      } catch(e) { console.log('Sync error:', e); }
     })();
   </script>
 </body>

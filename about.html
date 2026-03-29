@@ -317,6 +317,18 @@
   <script src="/navigation.js"></script>
   <script src="scripts.js"></script>
   <script>feather.replace();</script>
+  <script>
+    (function() {
+      try {
+        const stored = localStorage.getItem('nexon_site');
+        if (!stored) return;
+        const site = JSON.parse(stored);
+        if (site.pages && site.pages.about === false) {
+          document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;min-height:100vh;background:#0a2463;color:#fff;font-family:sans-serif;"><p>Page under maintenance</p></div>';
+        }
+      } catch(e) {}
+    })();
+  </script>
 </body>
 </html>
 
