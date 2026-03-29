@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXON Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    .sidebar-link.active { background: #eff6ff; color: #2563eb; }
+    .sidebar-link:hover:not(.active) { background: #f3f4f6; }
+    .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .modal { display: none; }
+    .modal.active { display: flex; }
+    .toast { animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .loader { border: 3px solid #f3f3f3; border-top: 3px solid #2563eb; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Login Screen -->
+  <div id="loginScreen" class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 shadow-lg shadow-blue-500/25">
+          <span class="text-white font-bold text-2xl">N</span>
+        </div>
+        <h1 class="text-3xl font-bold text-white mb-2">NEXON Engineering</h1>
+        <p class="text-gray-400">Admin Dashboard</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-white/10">
+        <h2 class="text-xl font-semibold text-white mb-6">Sign in to your account</h2>
+        <div id="loginError" class="hidden p-3 mb-4 bg-red-500/20 border border-red-500/30 rounded-lg text-red-200 text-sm"></div>
+        <form id="loginForm" class="space-y-5">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Username</label>
+            <input type="text" id="loginUsername" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter username" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+            <input type="password" id="loginPassword" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter password" required>
+          </div>
+          <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition-all">Sign In</button>
+        </form>
+        <p class="mt-6 text-center text-sm text-gray-400">Default: <span class="text-blue-400">admin</span> / <span class="text-blue-400">admin123</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboardScreen" class="hidden">
+    <!-- Sidebar -->
+    <aside class="fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 flex flex-col">
+      <div class="p-6 border-b border-gray-100">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
+            <span class="text-white font-bold text-lg">N</span>
+          </div>
+          <div>
+            <h1 class="font-bold text-gray-900">NEXON</h1>
+            <p class="text-xs text-gray-500">Admin Dashboard</p>
+          </div>
+        </div>
+      </div>
+      <nav class="flex-1 p-4 space-y-1">
+        <button onclick="showTab('dashboard')" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 transition-all" data-tab="dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span class="font-medium">Dashboard</span>
+        </button>
+        <button onclick="showTab('pages')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 transition-all" data-tab="pages">
+          <i data-lucide="file-text"></i>
+          <span class="font-medium">Pages</span>
+        </button>
+        <button onclick="showTab('projects')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 transition-all" data-tab="projects">
+          <i data-lucide="folder-kanban"></i>
+          <span class="font-medium">Projects</span>
+        </button>
+        <button onclick="showTab('clients')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 transition-all" data-tab="clients">
+          <i data-lucide="users"></i>
+          <span class="font-medium">Clients</span>
+        </button>
+        <button onclick="showTab('messages')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 transition-all" data-tab="messages">
+          <i data-lucide="message-square"></i>
+          <span class="font-medium">Messages</span>
+          <span id="msgBadge" class="hidden ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">0</span>
+        </button>
+        <button onclick="showTab('settings')" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 transition-all" data-tab="settings">
+          <i data-lucide="settings"></i>
+          <span class="font-medium">Settings</span>
+        </button>
+      </nav>
+      <div class="p-4 border-t border-gray-100">
+        <div class="flex items-center gap-3 mb-4 px-4">
+          <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+            <span id="userInitial" class="text-blue-700 font-semibold text-sm">A</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p id="userName" class="text-sm font-medium text-gray-900 truncate">Admin</p>
+            <p class="text-xs text-gray-500">Admin</p>
+          </div>
+        </div>
+        <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+          <i data-lucide="log-out" class="w-[18px] h-[18px]"></i>
+          <span class="font-medium">Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="lg:pl-64">
+      <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-lg border-b border-gray-200">
+        <div class="flex items-center justify-between px-4 py-4">
+          <button onclick="logout()" class="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+          <div></div>
+          <div class="flex items-center gap-4">
+            <span class="text-sm text-gray-500" id="currentDate"></span>
+          </div>
+        </div>
+      </header>
+      <main class="p-6">
+        <!-- Dashboard Tab -->
+        <div id="tab-dashboard" class="tab-content">
+          <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Welcome back, <span id="welcomeUser">Admin</span></h1>
+            <p class="text-gray-500 mt-1">Here's what's happening with your website.</p>
+          </div>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl border border-gray-200 p-5 card transition-all">
+              <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center mb-3">
+                <i data-lucide="users" class="text-white w-5 h-5"></i>
+              </div>
+              <p id="statUsers" class="text-3xl font-bold text-gray-900">0</p>
+              <p class="text-xs text-gray-500 mt-1">Total Users</p>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 p-5 card transition-all">
+              <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center mb-3">
+                <i data-lucide="folder-kanban" class="text-white w-5 h-5"></i>
+              </div>
+              <p id="statProjects" class="text-3xl font-bold text-gray-900">0</p>
+              <p class="text-xs text-gray-500 mt-1">Projects</p>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 p-5 card transition-all">
+              <div class="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center mb-3">
+                <i data-lucide="handshake" class="text-white w-5 h-5"></i>
+              </div>
+              <p id="statClients" class="text-3xl font-bold text-gray-900">0</p>
+              <p class="text-xs text-gray-500 mt-1">Clients</p>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 p-5 card transition-all">
+              <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center mb-3">
+                <i data-lucide="message-square" class="text-white w-5 h-5"></i>
+              </div>
+              <p id="statMessages" class="text-3xl font-bold text-gray-900">0</p>
+              <p class="text-xs text-gray-500 mt-1">Messages</p>
+            </div>
+          </div>
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 class="font-semibold text-gray-900 mb-4">Quick Actions</h2>
+              <div class="space-y-3">
+                <button onclick="showTab('projects')" class="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <i data-lucide="plus-circle" class="text-blue-600 w-5 h-5"></i>
+                  <span class="text-gray-700">Add New Project</span>
+                </button>
+                <button onclick="showTab('messages')" class="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <i data-lucide="mail" class="text-emerald-600 w-5 h-5"></i>
+                  <span class="text-gray-700">View Messages</span>
+                </button>
+                <button onclick="exportData()" class="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <i data-lucide="download" class="text-purple-600 w-5 h-5"></i>
+                  <span class="text-gray-700">Export Data (JSON)</span>
+                </button>
+                <button onclick="document.getElementById('importInput').click()" class="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <i data-lucide="upload" class="text-orange-600 w-5 h-5"></i>
+                  <span class="text-gray-700">Import Data (JSON)</span>
+                </button>
+                <input type="file" id="importInput" accept=".json" class="hidden" onchange="importData(event)">
+              </div>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+              <h2 class="font-semibold text-gray-900 mb-4">Recent Messages</h2>
+              <div id="recentMessages" class="space-y-3">
+                <p class="text-gray-500 text-sm text-center py-4">No messages yet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pages Tab -->
+        <div id="tab-pages" class="tab-content hidden">
+          <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Page Management</h1>
+            <p class="text-gray-500 mt-1">Control page visibility and edit content.</p>
+          </div>
+          <div class="space-y-4" id="pagesList"></div>
+        </div>
+
+        <!-- Projects Tab -->
+        <div id="tab-projects" class="tab-content hidden">
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-900">Projects</h1>
+              <p class="text-gray-500 mt-1">Manage your portfolio projects.</p>
+            </div>
+            <button onclick="openProjectModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2">
+              <i data-lucide="plus" class="w-4 h-4"></i> Add Project
+            </button>
+          </div>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="projectsList"></div>
+        </div>
+
+        <!-- Clients Tab -->
+        <div id="tab-clients" class="tab-content hidden">
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-900">Clients</h1>
+              <p class="text-gray-500 mt-1">Manage your client logos.</p>
+            </div>
+            <button onclick="openClientModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2">
+              <i data-lucide="plus" class="w-4 h-4"></i> Add Client
+            </button>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="clientsList"></div>
+        </div>
+
+        <!-- Messages Tab -->
+        <div id="tab-messages" class="tab-content hidden">
+          <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Messages</h1>
+            <p class="text-gray-500 mt-1">View contact form submissions.</p>
+          </div>
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div class="p-4 border-b border-gray-100">
+                <h2 class="font-semibold text-gray-900">Inbox</h2>
+              </div>
+              <div id="messagesList" class="divide-y divide-gray-100 max-h-[500px] overflow-y-auto">
+                <p class="text-gray-500 text-sm text-center py-8">No messages</p>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div id="messageDetail" class="p-6">
+                <div class="text-center py-12 text-gray-400">
+                  <i data-lucide="mail" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                  <p>Select a message to view</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="tab-settings" class="tab-content hidden">
+          <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Settings</h1>
+            <p class="text-gray-500 mt-1">Manage your website settings.</p>
+          </div>
+          <div class="grid lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 space-y-6">
+              <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="font-semibold text-gray-900 mb-4">Company Information</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                    <input type="text" id="settingCompanyName" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tagline</label>
+                    <input type="text" id="settingTagline" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="font-semibold text-gray-900 mb-4">Contact Information</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" id="settingEmail" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <input type="text" id="settingPhone" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
+                    <input type="text" id="settingWhatsapp" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                    <input type="text" id="settingAddress" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="font-semibold text-gray-900 mb-4">Social Media</h2>
+                <div class="grid md:grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Facebook</label>
+                    <input type="text" id="settingFacebook" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Instagram</label>
+                    <input type="text" id="settingInstagram" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
+                    <input type="text" id="settingLinkedin" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  </div>
+                </div>
+              </div>
+              <button onclick="saveSettings()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                Save All Settings
+              </button>
+            </div>
+            <div class="space-y-6">
+              <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="font-semibold text-gray-900 mb-4">Change Password</h2>
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                    <input type="password" id="currentPassword" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                    <input type="password" id="newPassword" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg">
+                  </div>
+                  <button onclick="changePassword()" class="w-full bg-gray-900 text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                    Update Password
+                  </button>
+                </div>
+              </div>
+              <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="font-semibold text-gray-900 mb-4">Data Management</h2>
+                <div class="space-y-3">
+                  <button onclick="exportData()" class="w-full flex items-center justify-center gap-2 py-2.5 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-colors">
+                    <i data-lucide="download" class="w-4 h-4"></i> Export All Data
+                  </button>
+                  <button onclick="document.getElementById('importInput2').click()" class="w-full flex items-center justify-center gap-2 py-2.5 bg-amber-500 text-white rounded-lg font-medium hover:bg-amber-600 transition-colors">
+                    <i data-lucide="upload" class="w-4 h-4"></i> Import Data
+                  </button>
+                  <input type="file" id="importInput2" accept=".json" class="hidden" onchange="importData(event)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Project Modal -->
+  <div id="projectModal" class="modal fixed inset-0 z-50 items-center justify-center p-4 bg-black/50">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between p-6 border-b border-gray-100">
+        <h2 id="projectModalTitle" class="text-lg font-semibold text-gray-900">Add Project</h2>
+        <button onclick="closeProjectModal()" class="p-2 text-gray-400 hover:text-gray-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form id="projectForm" class="p-6 space-y-4">
+        <input type="hidden" id="projectId">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+          <input type="text" id="projectTitle" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <textarea id="projectDescription" rows="3" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <input type="text" id="projectCategory" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg" placeholder="e.g. Automation">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Year</label>
+            <input type="text" id="projectYear" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Client</label>
+          <input type="text" id="projectClient" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+          <input type="text" id="projectImage" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg" placeholder="images/project.jpg">
+        </div>
+        <div class="flex justify-end gap-3 pt-4">
+          <button type="button" onclick="closeProjectModal()" class="px-4 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+          <button type="submit" class="px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">Save Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Client Modal -->
+  <div id="clientModal" class="modal fixed inset-0 z-50 items-center justify-center p-4 bg-black/50">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between p-6 border-b border-gray-100">
+        <h2 id="clientModalTitle" class="text-lg font-semibold text-gray-900">Add Client</h2>
+        <button onclick="closeClientModal()" class="p-2 text-gray-400 hover:text-gray-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form id="clientForm" class="p-6 space-y-4">
+        <input type="hidden" id="clientId">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+          <input type="text" id="clientName" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Logo URL</label>
+          <input type="text" id="clientLogo" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg" placeholder="images/client.jpg">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Website</label>
+          <input type="text" id="clientWebsite" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg" placeholder="https://example.com">
+        </div>
+        <div class="flex justify-end gap-3 pt-4">
+          <button type="button" onclick="closeClientModal()" class="px-4 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+          <button type="submit" class="px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">Save Client</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed top-4 right-4 z-50 px-4 py-3 bg-gray-900 text-white rounded-lg shadow-lg hidden"></div>
+
+  <script>
+    // Data Store
+    const DEFAULT_DATA = {
+      users: [{ id: '1', username: 'admin', password: 'admin123', role: 'admin' }],
+      settings: {
+        companyName: 'NEXON Engineering Services',
+        tagline: 'Industrial Excellence, Trusted Solutions',
+        email: 'nexonengineering.service@gmail.com',
+        phone: '+94 77 375 3621',
+        whatsapp: '+94773753621',
+        address: 'Colombo, Sri Lanka',
+        facebook: '',
+        instagram: '',
+        linkedin: ''
+      },
+      pages: [
+        { id: '1', slug: 'home', label: 'Home', visible: true },
+        { id: '2', slug: 'about', label: 'About', visible: true },
+        { id: '3', slug: 'services', label: 'Services', visible: true },
+        { id: '4', slug: 'projects', label: 'Projects', visible: true },
+        { id: '5', slug: 'contact', label: 'Contact', visible: true }
+      ],
+      projects: [],
+      clients: [],
+      messages: []
+    };
+
+    let data = JSON.parse(localStorage.getItem('nexon_admin_data')) || JSON.parse(JSON.stringify(DEFAULT_DATA));
+
+    function saveData() {
+      localStorage.setItem('nexon_admin_data', JSON.stringify(data));
+      updateStats();
+    }
+
+    // Auth
+    function login(username, password) {
+      const user = data.users.find(u => u.username === username && u.password === password);
+      if (user) {
+        sessionStorage.setItem('nexon_logged_in', 'true');
+        sessionStorage.setItem('nexon_user', username);
+        return true;
+      }
+      return false;
+    }
+
+    function logout() {
+      sessionStorage.removeItem('nexon_logged_in');
+      sessionStorage.removeItem('nexon_user');
+      location.reload();
+    }
+
+    function checkAuth() {
+      return sessionStorage.getItem('nexon_logged_in') === 'true';
+    }
+
+    // Toast
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg text-white ${type === 'error' ? 'bg-red-500' : 'bg-gray-900'} toast`;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    // Tab Navigation
+    function showTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      document.querySelector(`[data-tab="${tabName}"]`)?.classList.add('active');
+      lucide.createIcons();
+    }
+
+    // Stats
+    function updateStats() {
+      document.getElementById('statUsers').textContent = data.users.length;
+      document.getElementById('statProjects').textContent = data.projects.length;
+      document.getElementById('statClients').textContent = data.clients.length;
+      document.getElementById('statMessages').textContent = data.messages.length;
+      
+      const unread = data.messages.filter(m => m.status === 'new').length;
+      const badge = document.getElementById('msgBadge');
+      if (unread > 0) {
+        badge.textContent = unread;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      // Recent messages
+      const recent = data.messages.slice(0, 3);
+      const container = document.getElementById('recentMessages');
+      if (recent.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">No messages yet</p>';
+      } else {
+        container.innerHTML = recent.map(m => `
+          <div class="p-3 rounded-lg ${m.status === 'new' ? 'bg-blue-50' : 'bg-gray-50'}">
+            <p class="font-medium text-gray-900 text-sm">${m.name}</p>
+            <p class="text-xs text-gray-500 truncate">${m.message}</p>
+          </div>
+        `).join('');
+      }
+      lucide.createIcons();
+    }
+
+    // Pages
+    function renderPages() {
+      const container = document.getElementById('pagesList');
+      container.innerHTML = data.pages.map(page => `
+        <div class="bg-white rounded-xl border border-gray-200 p-6 flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <i data-lucide="file-text" class="text-blue-600 w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-900">${page.label}</h3>
+              <p class="text-sm text-gray-500">/${page.slug}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="px-2 py-1 text-xs font-medium rounded-full ${page.visible ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
+              ${page.visible ? 'Visible' : 'Hidden'}
+            </span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" ${page.visible ? 'checked' : ''} onchange="togglePage('${page.id}', this.checked)" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function togglePage(id, visible) {
+      const page = data.pages.find(p => p.id === id);
+      if (page) page.visible = visible;
+      saveData();
+      showToast(`Page ${visible ? 'visible' : 'hidden'}`);
+      renderPages();
+    }
+
+    // Projects
+    function renderProjects() {
+      const container = document.getElementById('projectsList');
+      if (data.projects.length === 0) {
+        container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-500">No projects yet. Click "Add Project" to create one.</div>';
+      } else {
+        container.innerHTML = data.projects.map(p => `
+          <div class="bg-white rounded-xl border border-gray-200 overflow-hidden group">
+            <div class="aspect-video bg-gray-100 relative">
+              ${p.image ? `<img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">` : '<div class="w-full h-full flex items-center justify-center text-gray-400">No Image</div>'}
+              <div class="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onclick="editProject('${p.id}')" class="p-2 bg-white rounded-lg shadow text-gray-600 hover:text-blue-600">
+                  <i data-lucide="pencil" class="w-4 h-4"></i>
+                </button>
+                <button onclick="deleteProject('${p.id}')" class="p-2 bg-white rounded-lg shadow text-gray-600 hover:text-red-600">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4">
+              <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">${p.category || 'General'}</span>
+              <h3 class="font-semibold text-gray-900 mt-2">${p.title}</h3>
+              <p class="text-sm text-gray-500 mt-1 line-clamp-2">${p.description || ''}</p>
+            </div>
+          </div>
+        `).join('');
+      }
+      lucide.createIcons();
+    }
+
+    function openProjectModal(id = null) {
+      document.getElementById('projectModal').classList.add('active');
+      document.getElementById('projectModalTitle').textContent = id ? 'Edit Project' : 'Add Project';
+      if (id) {
+        const p = data.projects.find(pr => pr.id === id);
+        document.getElementById('projectId').value = id;
+        document.getElementById('projectTitle').value = p.title;
+        document.getElementById('projectDescription').value = p.description || '';
+        document.getElementById('projectCategory').value = p.category || '';
+        document.getElementById('projectClient').value = p.client || '';
+        document.getElementById('projectYear').value = p.year || '';
+        document.getElementById('projectImage').value = p.image || '';
+      } else {
+        document.getElementById('projectForm').reset();
+        document.getElementById('projectId').value = '';
+      }
+      lucide.createIcons();
+    }
+
+    function closeProjectModal() {
+      document.getElementById('projectModal').classList.remove('active');
+    }
+
+    function editProject(id) { openProjectModal(id); }
+
+    function deleteProject(id) {
+      if (confirm('Delete this project?')) {
+        data.projects = data.projects.filter(p => p.id !== id);
+        saveData();
+        showToast('Project deleted');
+        renderProjects();
+      }
+    }
+
+    document.getElementById('projectForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = document.getElementById('projectId').value;
+      const project = {
+        id: id || Date.now().toString(),
+        title: document.getElementById('projectTitle').value,
+        description: document.getElementById('projectDescription').value,
+        category: document.getElementById('projectCategory').value,
+        client: document.getElementById('projectClient').value,
+        year: document.getElementById('projectYear').value,
+        image: document.getElementById('projectImage').value
+      };
+      if (id) {
+        const idx = data.projects.findIndex(p => p.id === id);
+        data.projects[idx] = project;
+      } else {
+        data.projects.push(project);
+      }
+      saveData();
+      showToast(id ? 'Project updated' : 'Project added');
+      closeProjectModal();
+      renderProjects();
+    });
+
+    // Clients
+    function renderClients() {
+      const container = document.getElementById('clientsList');
+      if (data.clients.length === 0) {
+        container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-500">No clients yet. Click "Add Client" to create one.</div>';
+      } else {
+        container.innerHTML = data.clients.map(c => `
+          <div class="bg-white rounded-xl border border-gray-200 overflow-hidden group">
+            <div class="h-32 bg-gray-50 flex items-center justify-center p-4 relative">
+              ${c.logo ? `<img src="${c.logo}" alt="${c.name}" class="max-w-full max-h-full object-contain">` : `<div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold text-gray-400">${c.name.charAt(0)}</div>`}
+              <div class="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onclick="editClient('${c.id}')" class="p-1.5 bg-white rounded-lg shadow text-gray-600 hover:text-blue-600">
+                  <i data-lucide="pencil" class="w-4 h-4"></i>
+                </button>
+                <button onclick="deleteClient('${c.id}')" class="p-1.5 bg-white rounded-lg shadow text-gray-600 hover:text-red-600">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div class="p-4 text-center">
+              <h3 class="font-medium text-gray-900">${c.name}</h3>
+            </div>
+          </div>
+        `).join('');
+      }
+      lucide.createIcons();
+    }
+
+    function openClientModal(id = null) {
+      document.getElementById('clientModal').classList.add('active');
+      document.getElementById('clientModalTitle').textContent = id ? 'Edit Client' : 'Add Client';
+      if (id) {
+        const c = data.clients.find(cl => cl.id === id);
+        document.getElementById('clientId').value = id;
+        document.getElementById('clientName').value = c.name;
+        document.getElementById('clientLogo').value = c.logo || '';
+        document.getElementById('clientWebsite').value = c.website || '';
+      } else {
+        document.getElementById('clientForm').reset();
+        document.getElementById('clientId').value = '';
+      }
+      lucide.createIcons();
+    }
+
+    function closeClientModal() {
+      document.getElementById('clientModal').classList.remove('active');
+    }
+
+    function editClient(id) { openClientModal(id); }
+
+    function deleteClient(id) {
+      if (confirm('Delete this client?')) {
+        data.clients = data.clients.filter(c => c.id !== id);
+        saveData();
+        showToast('Client deleted');
+        renderClients();
+      }
+    }
+
+    document.getElementById('clientForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = document.getElementById('clientId').value;
+      const client = {
+        id: id || Date.now().toString(),
+        name: document.getElementById('clientName').value,
+        logo: document.getElementById('clientLogo').value,
+        website: document.getElementById('clientWebsite').value
+      };
+      if (id) {
+        const idx = data.clients.findIndex(c => c.id === id);
+        data.clients[idx] = client;
+      } else {
+        data.clients.push(client);
+      }
+      saveData();
+      showToast(id ? 'Client updated' : 'Client added');
+      closeClientModal();
+      renderClients();
+    });
+
+    // Messages
+    function renderMessages() {
+      const container = document.getElementById('messagesList');
+      if (data.messages.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-sm text-center py-8">No messages</p>';
+      } else {
+        container.innerHTML = data.messages.map(m => `
+          <div onclick="viewMessage('${m.id}')" class="p-4 cursor-pointer hover:bg-gray-50 ${m.status === 'new' ? 'bg-blue-50' : ''}">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 ${m.status === 'new' ? 'bg-blue-100 text-blue-700' : 'bg-gray-200 text-gray-600'} rounded-full flex items-center justify-center font-bold">
+                ${m.name.charAt(0).toUpperCase()}
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-medium text-gray-900">${m.name}</p>
+                <p class="text-sm text-gray-500 truncate">${m.email}</p>
+              </div>
+              <span class="text-xs text-gray-400">${new Date(m.createdAt).toLocaleDateString()}</span>
+            </div>
+            <p class="mt-2 text-sm text-gray-600 line-clamp-1 pl-13">${m.message}</p>
+          </div>
+        `).join('');
+      }
+      lucide.createIcons();
+    }
+
+    function viewMessage(id) {
+      const m = data.messages.find(msg => msg.id === id);
+      if (m) {
+        m.status = 'read';
+        saveData();
+        document.getElementById('messageDetail').innerHTML = `
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xl font-bold">
+              ${m.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <p class="font-semibold text-gray-900">${m.name}</p>
+              <p class="text-sm text-blue-600">${m.email}</p>
+            </div>
+          </div>
+          <div class="mb-4">
+            <p class="text-xs text-gray-400">Received: ${new Date(m.createdAt).toLocaleString()}</p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-4 mb-6">
+            <p class="text-gray-700 whitespace-pre-wrap">${m.message}</p>
+          </div>
+          <div class="flex gap-3">
+            <a href="mailto:${m.email}" class="flex-1 bg-blue-600 text-white text-center py-3 rounded-xl font-medium hover:bg-blue-700">Reply via Email</a>
+            <button onclick="deleteMessage('${m.id}')" class="px-6 py-3 border border-red-200 text-red-500 rounded-xl font-medium hover:bg-red-50">Delete</button>
+          </div>
+        `;
+        renderMessages();
+      }
+    }
+
+    function deleteMessage(id) {
+      if (confirm('Delete this message?')) {
+        data.messages = data.messages.filter(m => m.id !== id);
+        saveData();
+        showToast('Message deleted');
+        renderMessages();
+        document.getElementById('messageDetail').innerHTML = `
+          <div class="text-center py-12 text-gray-400">
+            <i data-lucide="mail" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+            <p>Select a message to view</p>
+          </div>
+        `;
+        lucide.createIcons();
+      }
+    }
+
+    // Settings
+    function loadSettings() {
+      document.getElementById('settingCompanyName').value = data.settings.companyName || '';
+      document.getElementById('settingTagline').value = data.settings.tagline || '';
+      document.getElementById('settingEmail').value = data.settings.email || '';
+      document.getElementById('settingPhone').value = data.settings.phone || '';
+      document.getElementById('settingWhatsapp').value = data.settings.whatsapp || '';
+      document.getElementById('settingAddress').value = data.settings.address || '';
+      document.getElementById('settingFacebook').value = data.settings.facebook || '';
+      document.getElementById('settingInstagram').value = data.settings.instagram || '';
+      document.getElementById('settingLinkedin').value = data.settings.linkedin || '';
+    }
+
+    function saveSettings() {
+      data.settings = {
+        companyName: document.getElementById('settingCompanyName').value,
+        tagline: document.getElementById('settingTagline').value,
+        email: document.getElementById('settingEmail').value,
+        phone: document.getElementById('settingPhone').value,
+        whatsapp: document.getElementById('settingWhatsapp').value,
+        address: document.getElementById('settingAddress').value,
+        facebook: document.getElementById('settingFacebook').value,
+        instagram: document.getElementById('settingInstagram').value,
+        linkedin: document.getElementById('settingLinkedin').value
+      };
+      saveData();
+      showToast('Settings saved');
+    }
+
+    function changePassword() {
+      const current = document.getElementById('currentPassword').value;
+      const newPass = document.getElementById('newPassword').value;
+      const user = data.users.find(u => u.username === sessionStorage.getItem('nexon_user'));
+      if (user.password !== current) {
+        showToast('Current password is incorrect', 'error');
+        return;
+      }
+      if (newPass.length < 6) {
+        showToast('Password must be at least 6 characters', 'error');
+        return;
+      }
+      user.password = newPass;
+      saveData();
+      showToast('Password changed');
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+    }
+
+    // Export/Import
+    function exportData() {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nexon-data-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      showToast('Data exported');
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const imported = JSON.parse(e.target.result);
+            if (imported.settings && imported.projects && imported.clients) {
+              data = imported;
+              saveData();
+              showToast('Data imported successfully');
+              location.reload();
+            } else {
+              showToast('Invalid data format', 'error');
+            }
+          } catch (err) {
+            showToast('Failed to parse file', 'error');
+          }
+        };
+        reader.readAsText(file);
+      }
+    }
+
+    // Initialize
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    if (checkAuth()) {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboardScreen').classList.remove('hidden');
+      document.getElementById('userName').textContent = sessionStorage.getItem('nexon_user');
+      document.getElementById('userInitial').textContent = sessionStorage.getItem('nexon_user').charAt(0).toUpperCase();
+      document.getElementById('welcomeUser').textContent = sessionStorage.getItem('nexon_user');
+      updateStats();
+      renderPages();
+      renderProjects();
+      renderClients();
+      renderMessages();
+      loadSettings();
+    } else {
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+        if (login(username, password)) {
+          location.reload();
+        } else {
+          document.getElementById('loginError').textContent = 'Invalid username or password';
+          document.getElementById('loginError').classList.remove('hidden');
+        }
+      });
+    }
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
