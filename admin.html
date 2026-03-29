@@ -118,13 +118,21 @@
       try { 
         const v = localStorage.getItem(key); 
         const data = v ? JSON.parse(v) : null;
-        // Force reset if no data or old version
-        if (!data || (key === 'nexon_site' && !data._version)) {
+        // Validate data type - if it's supposed to be array but isn't, reset
+        const isArray = Array.isArray(def);
+        if (!data) {
+          localStorage.setItem(key, JSON.stringify({...def, _version: DATA_VERSION}));
+          return {...def, _version: DATA_VERSION};
+        }
+        if (isArray && !Array.isArray(data)) {
           localStorage.setItem(key, JSON.stringify({...def, _version: DATA_VERSION}));
           return {...def, _version: DATA_VERSION};
         }
         return data;
-      } catch { return def; } 
+      } catch { 
+        localStorage.setItem(key, JSON.stringify({...def, _version: DATA_VERSION}));
+        return {...def, _version: DATA_VERSION};
+      } 
     };
     const save = (key, val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} };
 
