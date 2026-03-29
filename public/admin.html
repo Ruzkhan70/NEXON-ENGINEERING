@@ -432,6 +432,25 @@
   <!-- Toast -->
   <div id="toast" class="fixed top-4 right-4 z-50 px-4 py-3 bg-gray-900 text-white rounded-lg shadow-lg hidden"></div>
 
+  <!-- Inactivity Modal -->
+  <div id="inactivityModal" class="fixed inset-0 z-50 items-center justify-center bg-black/50 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 text-center">
+      <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i data-lucide="clock" class="w-8 h-8 text-orange-600"></i>
+      </div>
+      <h2 class="text-xl font-bold text-gray-900 mb-2">Session Expiring</h2>
+      <p class="text-gray-600 mb-4">You will be logged out in <span id="logoutCountdown" class="font-bold text-orange-600">30</span> seconds due to inactivity.</p>
+      <div class="flex gap-3">
+        <button onclick="stayLoggedIn()" class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          Stay Logged In
+        </button>
+        <button onclick="logout()" class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+          Log Out
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Data Store
     const DEFAULT_DATA = {
@@ -497,8 +516,58 @@
     function logout() {
       sessionStorage.removeItem('nexon_logged_in');
       sessionStorage.removeItem('nexon_user');
+      clearTimeout(inactivityTimeout);
+      clearInterval(countdownInterval);
       location.reload();
     }
+
+    // Inactivity Tracking
+    const INACTIVITY_LIMIT = 2 * 60 * 1000; // 2 minutes
+    const WARNING_TIME = 30 * 1000; // 30 seconds warning
+    let inactivityTimeout;
+    let countdownInterval;
+    let warningShown = false;
+
+    function resetInactivityTimer() {
+      clearTimeout(inactivityTimeout);
+      clearInterval(countdownInterval);
+      document.getElementById('inactivityModal').classList.add('hidden');
+      document.getElementById('inactivityModal').classList.remove('flex');
+      warningShown = false;
+      
+      if (checkAuth()) {
+        inactivityTimeout = setTimeout(showInactivityWarning, INACTIVITY_LIMIT);
+      }
+    }
+
+    function showInactivityWarning() {
+      warningShown = true;
+      const modal = document.getElementById('inactivityModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      
+      let countdown = 30;
+      document.getElementById('logoutCountdown').textContent = countdown;
+      
+      countdownInterval = setInterval(() => {
+        countdown--;
+        document.getElementById('logoutCountdown').textContent = countdown;
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          logout();
+        }
+      }, 1000);
+    }
+
+    function stayLoggedIn() {
+      resetInactivityTimer();
+    }
+
+    // Track user activity
+    const activityEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'];
+    activityEvents.forEach(event => {
+      document.addEventListener(event, resetInactivityTimer);
+    });
 
     function checkAuth() {
       return sessionStorage.getItem('nexon_logged_in') === 'true';
@@ -926,6 +995,7 @@
       renderClients();
       renderMessages();
       loadSettings();
+      resetInactivityTimer();
     } else {
       document.getElementById('loginForm').addEventListener('submit', (e) => {
         e.preventDefault();
