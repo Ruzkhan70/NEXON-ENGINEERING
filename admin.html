@@ -11,6 +11,10 @@
   <script src="https://unpkg.com/react@18/umd/react.production.min.js?v=20250329" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js?v=20250329" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js?v=20250329"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     ::-webkit-scrollbar { width: 6px; }
@@ -59,8 +63,9 @@
     // Default Data with Website Content
     const DEFAULT_SITE = {
       companyName: "NEXON Engineering Services (Pvt) Ltd",
+      adminName: "Rimaz",
       logo: "https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_hmrljuhmrljuhmrl-Photoroom1215.png",
-      stats: { projects: "50+", clients: "30+", years: "8+", support: "24/7" },
+      stats: { projects: "50+", clients: "30+", years: "8+", support: "24/7", weekends: "52" },
       contact: {
         phone: "+94 77 375 3621",
         email: "nexonengineering.service@gmail.com",
@@ -173,7 +178,9 @@
         menu: <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />,
         x: <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />,
         upload: <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />,
+        download: <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />,
         star: <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />,
+        chart: <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />,
       };
       return (
         <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}>
@@ -394,28 +401,55 @@
       const [activeTab, setActiveTab] = useState("dashboard");
       const [sidebarOpen, setSidebarOpen] = useState(true);
       const [toast, setToast] = useState(null);
-      const [site, setSite] = useState(() => load("nexon_site", DEFAULT_SITE));
-      const [projects, setProjects] = useState(() => {
-        const data = load("nexon_projects", DEFAULT_PROJECTS);
-        return Array.isArray(data) ? data : DEFAULT_PROJECTS;
-      });
-      const [clients, setClients] = useState(() => {
-        const data = load("nexon_clients", DEFAULT_CLIENTS);
-        return Array.isArray(data) ? data : DEFAULT_CLIENTS;
-      });
-      const [messages, setMessages] = useState(() => {
-        const data = load("nexon_messages", DEFAULT_MESSAGES);
-        return Array.isArray(data) ? data : DEFAULT_MESSAGES;
-      });
-      const [services, setServices] = useState(() => {
-        const data = load("nexon_services", DEFAULT_SERVICES);
-        return Array.isArray(data) ? data : DEFAULT_SERVICES;
-      });
-      const [credentials, setCredentials] = useState(() => load("nexon_credentials", { username: "admin", hash: "aa28d6e3b8d8c0c7c25a276094af8ed1667d265bc20ef3239341fb2dff646933" }));
-      
-      // Auto-logout after 2 minutes of inactivity
       const [logoutWarning, setLogoutWarning] = useState(false);
       const [logoutCountdown, setLogoutCountdown] = useState(30);
+
+      const [site, setSite] = useState(DEFAULT_SITE);
+      const [projects, setProjects] = useState(DEFAULT_PROJECTS);
+      const [clients, setClients] = useState(DEFAULT_CLIENTS);
+      const [messages, setMessages] = useState(DEFAULT_MESSAGES);
+      const [services, setServices] = useState(DEFAULT_SERVICES);
+      const [credentials, setCredentials] = useState({ username: "admin", hash: "aa28d6e3b8d8c0c7c25a276094af8ed1667d265bc20ef3239341fb2dff646933" });
+      const [liveVisitors, setLiveVisitors] = useState(0);
+
+      // Firebase Sync
+      useEffect(() => {
+        if (!authed) return;
+        
+        const siteRef = db.ref("site");
+        const projectsRef = db.ref("projects");
+        const clientsRef = db.ref("clients");
+        const messagesRef = db.ref("messages");
+        const servicesRef = db.ref("services");
+        const credRef = db.ref("credentials");
+        const visitorRef = db.ref("stats/activeVisitors");
+
+        siteRef.on("value", s => s.val() && setSite(s.val()));
+        projectsRef.on("value", s => s.val() && setProjects(s.val()));
+        clientsRef.on("value", s => s.val() && setClients(s.val()));
+        messagesRef.on("value", s => s.val() && setMessages(s.val()));
+        servicesRef.on("value", s => s.val() && setServices(s.val()));
+        credRef.on("value", s => s.val() && setCredentials(s.val()));
+        visitorRef.on("value", s => setLiveVisitors(s.numChildren()));
+
+        return () => {
+          siteRef.off();
+          projectsRef.off();
+          clientsRef.off();
+          messagesRef.off();
+          servicesRef.off();
+          credRef.off();
+          visitorRef.off();
+        };
+      }, [authed]);
+
+      // Persistence helpers (push to Firebase)
+      const persistSite = (s) => db.ref("site").set(s);
+      const persistProjects = (p) => db.ref("projects").set(p);
+      const persistClients = (c) => db.ref("clients").set(c);
+      const persistMessages = (m) => db.ref("messages").set(m);
+      const persistServices = (s) => db.ref("services").set(s);
+      const persistCredentials = (c) => db.ref("credentials").set(c);
       
       useEffect(() => {
         if (!authed) return;
@@ -482,6 +516,40 @@
         setAuthed(false); 
       };
 
+      const handleExport = () => {
+        const fullData = {
+          site, projects, clients, messages, services, credentials,
+          _exportedAt: new Date().toISOString()
+        };
+        const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `nexon_backup_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        showToast("Site data exported successfully! 📥");
+      };
+
+      const handleImport = (file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            if (data.site) persistSite(data.site);
+            if (data.projects) persistProjects(data.projects);
+            if (data.clients) persistClients(data.clients);
+            if (data.messages) persistMessages(data.messages);
+            if (data.services) persistServices(data.services);
+            if (data.credentials) persistCredentials(data.credentials);
+            showToast("Site data imported successfully! 📤");
+            setTimeout(() => window.location.reload(), 1500);
+          } catch (err) {
+            showToast("Failed to import data. Invalid file format.");
+          }
+        };
+        reader.readAsText(file);
+      };
+
       if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
 
       // Logout warning modal
@@ -528,8 +596,8 @@
               )}
               {sidebarOpen && (
                 <div style={{ overflow: "hidden" }}>
-                  <div style={{ color: "#e2e8f0", fontWeight: 800, fontSize: 13, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 180 }}>{site.companyName.length > 18 ? "Nexon CMS" : site.companyName}</div>
-                  <div style={{ color: "#475569", fontSize: 11, whiteSpace: "nowrap" }}>Admin Panel</div>
+                  <div style={{ color: "#e2e8f0", fontWeight: 800, fontSize: 13, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 180 }}>{site.adminName || "Rimaz"}</div>
+                  <div style={{ color: "#475569", fontSize: 11, whiteSpace: "nowrap" }}>Nexon Admin</div>
                 </div>
               )}
             </div>
@@ -567,7 +635,7 @@
             </div>
 
             <div style={{ padding: 32 }}>
-              {activeTab === "dashboard" && <DashboardTab projects={projects} clients={clients} messages={messages} site={site} services={services} />}
+              {activeTab === "dashboard" && <DashboardTab projects={projects} clients={clients} messages={messages} site={site} services={services} liveVisitors={liveVisitors} />}
               {activeTab === "pages" && <PagesTab site={site} setSite={persistSite} showToast={showToast} />}
               {activeTab === "services" && <ServicesTab services={services} setServices={persistServices} showToast={showToast} />}
               {activeTab === "projects" && <ProjectsTab projects={projects} setProjects={persistProjects} showToast={showToast} />}
@@ -582,7 +650,15 @@
     }
 
     // Dashboard Tab
-    function DashboardTab({ projects, clients, messages, site, services }) {
+    function DashboardTab({ projects, clients, messages, site, services, liveVisitors }) {
+      const stats = [
+        { label: "Live Visitors", value: liveVisitors, icon: "eye", color: "#00b4d8", sub: "Active on site" },
+        { label: "Projects", value: projects.length, icon: "briefcase", color: "#8b5cf6", sub: "Showcased" },
+        { label: "Clients", value: clients.length, icon: "users", color: "#10b981", sub: "Trusted partners" },
+        { label: "Messages", value: messages.length, icon: "mail", color: "#f59e0b", sub: "Total inquiries" },
+        { label: "Weekends", value: site.stats.weekends || "52", icon: "star", color: "#ec4899", sub: "Operational cycle" }
+      ];
+
       const recent = [...messages].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 4);
       return (
         <div>
@@ -1014,8 +1090,11 @@
           <p className="section-sub">Control global site configuration, branding, contact details, and account security.</p>
           <div style={{ display: "grid", gap: 24 }}>
             <Card>
-              <h3 style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 16, marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}><Icon name="star" size={16} style={{ color: "#00b4d8" }} /> Branding</h3>
-              <Field label="Company Name" value={local.companyName} onChange={v => upd("companyName", v)} />
+              <h3 style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 16, marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}><Icon name="star" size={16} style={{ color: "#00b4d8" }} /> Branding & Identity</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <Field label="Company Name" value={local.companyName} onChange={v => upd("companyName", v)} />
+                <Field label="Admin Display Name" value={local.adminName} onChange={v => upd("adminName", v)} placeholder="e.g. Rimaz" />
+              </div>
               <ImageUpload label="Company Logo" value={local.logo} onChange={v => upd("logo", v)} previewHeight={100} />
               <button className="btn-primary" onClick={() => saveSite("Branding")}><Icon name="save" size={14} /> Save Branding</button>
             </Card>
@@ -1025,6 +1104,7 @@
                 <Field label="Projects Completed" value={local.stats.projects} onChange={v => upd("stats.projects", v)} placeholder="50+" />
                 <Field label="Industrial Clients" value={local.stats.clients} onChange={v => upd("stats.clients", v)} placeholder="30+" />
                 <Field label="Years of Experience" value={local.stats.years} onChange={v => upd("stats.years", v)} placeholder="8+" />
+                <Field label="Weekends Count" value={local.stats.weekends} onChange={v => upd("stats.weekends", v)} placeholder="52" />
                 <Field label="Emergency Support" value={local.stats.support} onChange={v => upd("stats.support", v)} placeholder="24/7" />
               </div>
               <button className="btn-primary" onClick={() => saveSite("Statistics")}><Icon name="save" size={14} /> Save Statistics</button>
@@ -1060,6 +1140,23 @@
               </div>
               <div style={{ marginTop: 16 }}>
                 <button className="btn-primary" onClick={() => saveSite("Page Visibility")}><Icon name="save" size={14} /> Save Visibility Settings</button>
+              </div>
+            </Card>
+            <Card>
+              <h3 style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 16, marginBottom: 6, display: "flex", alignItems: "center", gap: 8 }}>
+                <Icon name="chart" size={16} style={{ color: "#00b4d8" }} /> Data Portability
+              </h3>
+              <p style={{ color: "#64748b", fontSize: 13, marginBottom: 24 }}>Backup your site content or migrate it to another device.</p>
+              <div style={{ display: "flex", gap: 12 }}>
+                <button className="btn-primary" onClick={handleExport} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                  <Icon name="download" size={16} /> Export Data (.json)
+                </button>
+                <div style={{ flex: 1, position: "relative" }}>
+                  <input type="file" accept=".json" onChange={e => handleImport(e.target.files[0])} style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer", zIndex: 10 }} />
+                  <button className="btn-ghost" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    <Icon name="upload" size={16} /> Import Data
+                  </button>
+                </div>
               </div>
             </Card>
             <Card>

@@ -4,9 +4,15 @@
   --primary: #0A2463;
   --secondary: #3E5C76;
   --accent: #1E88E5;
+  --accent-light: #42A5F5;
   --frost: #E1F5FE;
   --pearl: #F8F9FA;
+  --navy: #051937;
   --glow: rgba(30, 136, 229, 0.4);
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-main: #F8F9FA;
+  --text-muted: #B0BEC5;
 }
 
 .container {
@@ -175,27 +181,66 @@ html, body {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 14px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--primary);
+  background: var(--navy);
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--accent), var(--secondary));
   border-radius: 10px;
-  border: 3px solid var(--primary);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #00d4ff, var(--accent));
+  background: var(--accent-light);
 }
 
-/* Glassmorphism Card */
+/* Custom Cursor */
+.custom-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.15s ease-out, opacity 0.3s ease;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+.custom-cursor.active {
+  transform: translate(-50%, -50%) scale(2.5);
+  background: #fff;
+}
+
+/* Glassmorphism 2.0 */
 .glass-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  pointer-events: none;
+}
+
+.glass-card:hover {
+  border-color: rgba(30, 136, 229, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: translateY(-5px);
 }
 
 /* Gradient Text */

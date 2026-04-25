@@ -97,6 +97,10 @@
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <link rel="stylesheet" href="shared.css">
 </head>
 <body class="bg-pearl font-sans antialiased">
@@ -140,68 +144,270 @@
 
 
   <!-- HERO -->
-  <section class="relative h-screen flex items-center justify-center bg-gradient-to-b from-royal to-navy overflow-hidden">
+  <section class="relative h-screen flex items-center justify-center bg-gradient-to-br from-navy via-navy to-royal overflow-hidden">
+    <!-- Animated background grid -->
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(var(--accent) 1px, transparent 1px); background-size: 50px 50px;"></div>
+    
     <div class="absolute inset-0 opacity-20">
       <div id="particles-js" class="w-full h-full"></div>
     </div>
 
-    <div id="hero-content" class="text-center z-10 transition-all duration-500 pointer-events-none">
-      <img id="main-logo"
-           src="https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_hmrljuhmrljuhmrl-Photoroom1215.png"
-           alt="NEXON Logo"
-           class="w-80 mx-auto mb-8 logo-transition" />
+    <div id="hero-content" class="text-center z-10 transition-all duration-500">
+      <div class="tilt inline-block cursor-pointer">
+        <img id="main-logo"
+             src="https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_hmrljuhmrljuhmrl-Photoroom1215.png"
+             alt="NEXON Logo"
+             class="w-80 mx-auto mb-8 logo-transition" />
+      </div>
 
-      <h1 class="text-5xl font-bold text-pearl mb-4">
-        Engineering Innovation with Precision
+      <h1 class="text-5xl md:text-7xl font-bold text-pearl mb-6 tracking-tight">
+        Engineering <span class="gradient-text">Innovation</span> <br>with Precision
       </h1>
+      
+      <p class="text-frost/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+        Industrial repair, maintenance, and automation solutions delivered with unparalleled excellence.
+      </p>
 
-      <a href="services.html"
-         class="inline-block mt-8 px-8 py-3 bg-royal hover:bg-indigo text-pearl rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-royal/50 pointer-events-auto">
-        Explore More
-      </a>
+      <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+        <a href="services.html"
+           class="px-10 py-4 bg-royal hover:bg-indigo text-pearl rounded-full font-bold transition-all duration-300 hover:shadow-[0_0_30px_rgba(30,136,229,0.5)] transform hover:-translate-y-1">
+          Explore Services
+        </a>
+        <a href="contact.html"
+           class="px-10 py-4 bg-transparent border-2 border-pearl/20 hover:border-royal text-pearl rounded-full font-bold transition-all duration-300 backdrop-blur-sm">
+          Get a Quote
+        </a>
+      </div>
     </div>
 
-    <div class="absolute bottom-20 left-0 right-0 text-center animate-bounce">
-      <i data-feather="chevron-down" class="w-10 h-10 text-pearl mx-auto"></i>
+    <div class="absolute bottom-10 left-0 right-0 text-center">
+      <a href="#stats-bar" class="animate-bounce inline-block">
+        <i data-feather="chevron-down" class="w-8 h-8 text-pearl/50"></i>
+      </a>
     </div>
 
   </section>
 
   <!-- STATS BAR -->
-  <section class="relative -mt-16 z-20 px-6">
-    <div class="max-w-5xl mx-auto bg-gradient-to-r from-navy via-[#0d2a6e] to-indigo rounded-3xl p-8 md:p-10 shadow-2xl border border-white/10">
+  <section id="stats-bar" class="relative -mt-16 z-20 px-6">
+    <div class="max-w-6xl mx-auto bg-navy/80 backdrop-blur-2xl rounded-[40px] p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 glass-card">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
         <div>
-          <div class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">50+</div>
-          <div class="text-pearl mt-2 text-base md:text-lg font-semibold">Projects Done</div>
+          <div class="text-4xl md:text-6xl font-bold gradient-text counter" data-target="50">0+</div>
+          <div class="text-pearl/60 mt-3 text-xs md:text-sm font-bold uppercase tracking-widest">Projects Done</div>
         </div>
         <div>
-          <div class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">30+</div>
-          <div class="text-pearl mt-2 text-base md:text-lg font-semibold">Industrial Clients</div>
+          <div class="text-4xl md:text-6xl font-bold gradient-text counter" data-target="30">0+</div>
+          <div class="text-pearl/60 mt-3 text-xs md:text-sm font-bold uppercase tracking-widest">Industrial Clients</div>
         </div>
         <div>
-          <div class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">8+</div>
-          <div class="text-pearl mt-2 text-base md:text-lg font-semibold">Years Experience</div>
+          <div class="text-4xl md:text-6xl font-bold gradient-text counter" data-target="8">0+</div>
+          <div class="text-pearl/60 mt-3 text-xs md:text-sm font-bold uppercase tracking-widest">Years Experience</div>
         </div>
         <div>
-          <div class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-royal to-cyan-300">24/7</div>
-          <div class="text-pearl mt-2 text-base md:text-lg font-semibold">Emergency Support</div>
+          <div class="text-4xl md:text-6xl font-bold gradient-text" data-stat="emergency">24/7</div>
+          <div class="text-pearl/60 mt-3 text-xs md:text-sm font-bold uppercase tracking-widest">Support</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE SPECIALIZATIONS -->
+  <section class="py-24 bg-pearl relative">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="text-royal font-bold tracking-[0.3em] uppercase text-xs mb-4 block">Our Expertise</span>
+        <h2 class="text-4xl md:text-5xl font-bold text-navy">Core Specializations</h2>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="glass-card bg-white p-10 group hover:bg-navy transition-all duration-500">
+          <div class="w-16 h-16 bg-royal/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-royal transition-colors">
+            <i data-feather="zap" class="w-8 h-8 text-royal group-hover:text-white"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-navy mb-4 group-hover:text-white">Electrical Systems</h3>
+          <p class="text-indigo/70 mb-6 group-hover:text-frost/70">Industrial wiring, panel installations, and complex electrical troubleshooting.</p>
+          <a href="services.html" class="text-royal font-bold flex items-center gap-2 group-hover:text-white">
+            Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+        
+        <!-- Card 2 -->
+        <div class="glass-card bg-white p-10 group hover:bg-navy transition-all duration-500">
+          <div class="w-16 h-16 bg-royal/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-royal transition-colors">
+            <i data-feather="cpu" class="w-8 h-8 text-royal group-hover:text-white"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-navy mb-4 group-hover:text-white">Industrial Automation</h3>
+          <p class="text-indigo/70 mb-6 group-hover:text-frost/70">PLC programming, machine retrofitting, and custom control solutions.</p>
+          <a href="services.html" class="text-royal font-bold flex items-center gap-2 group-hover:text-white">
+            Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+        
+        <!-- Card 3 -->
+        <div class="glass-card bg-white p-10 group hover:bg-navy transition-all duration-500">
+          <div class="w-16 h-16 bg-royal/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-royal transition-colors">
+            <i data-feather="sun" class="w-8 h-8 text-royal group-hover:text-white"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-navy mb-4 group-hover:text-white">Solar Engineering</h3>
+          <p class="text-indigo/70 mb-6 group-hover:text-frost/70">Sustainable energy solutions for industrial and commercial facilities.</p>
+          <a href="services.html" class="text-royal font-bold flex items-center gap-2 group-hover:text-white">
+            Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR PROCESS -->
+  <section class="py-24 bg-navy text-pearl relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-royal rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="flex flex-col md:flex-row items-end justify-between mb-16">
+        <div class="max-w-2xl">
+          <span class="text-royal font-bold tracking-[0.3em] uppercase text-xs mb-4 block">Methodology</span>
+          <h2 class="text-4xl md:text-5xl font-bold">How We Work</h2>
+        </div>
+        <p class="text-frost/60 text-lg mt-6 md:mt-0">Precision at every step of the journey.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12 relative">
+        <!-- Connector Line -->
+        <div class="hidden md:block absolute top-12 left-0 w-full h-[2px] bg-white/10 z-0"></div>
+        
+        <!-- Step 1 -->
+        <div class="relative z-10">
+          <div class="w-24 h-24 bg-royal rounded-3xl flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(30,136,229,0.3)]">
+            <span class="text-3xl font-bold">01</span>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Survey</h4>
+          <p class="text-frost/60">Detailed assessment and site analysis to understand requirements.</p>
+        </div>
+        
+        <!-- Step 2 -->
+        <div class="relative z-10">
+          <div class="w-24 h-24 bg-navy border-2 border-royal rounded-3xl flex items-center justify-center mb-8">
+            <span class="text-3xl font-bold text-royal">02</span>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Design</h4>
+          <p class="text-frost/60">Custom engineering blueprints and solution planning.</p>
+        </div>
+        
+        <!-- Step 3 -->
+        <div class="relative z-10">
+          <div class="w-24 h-24 bg-navy border-2 border-royal rounded-3xl flex items-center justify-center mb-8">
+            <span class="text-3xl font-bold text-royal">03</span>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Execution</h4>
+          <p class="text-frost/60">High-precision implementation by our expert engineering team.</p>
+        </div>
+        
+        <!-- Step 4 -->
+        <div class="relative z-10">
+          <div class="w-24 h-24 bg-navy border-2 border-royal rounded-3xl flex items-center justify-center mb-8">
+            <span class="text-3xl font-bold text-royal">04</span>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Support</h4>
+          <p class="text-frost/60">Ongoing maintenance and 24/7 emergency technical assistance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS MARQUEE -->
+  <section class="py-24 bg-pearl overflow-hidden">
+    <div class="container mx-auto px-6 mb-12 text-center">
+      <h2 class="text-3xl font-bold text-navy">Trusted by Industry Leaders</h2>
+    </div>
+    
+    <div class="marquee py-12 bg-white/50 backdrop-blur-sm border-y border-navy/5">
+      <div class="marquee-content gap-12 px-12">
+        <!-- Duplicate content for seamless loop -->
+        <div class="flex gap-12">
+          <div class="glass-card bg-white p-8 w-[400px] shadow-xl border-none">
+            <div class="flex text-amber-500 mb-4"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
+            <p class="text-indigo/80 italic mb-6">"Nexon provided exceptional service for our factory wiring. Their team is professional and highly skilled."</p>
+            <div class="font-bold text-navy">Operations Manager</div>
+            <div class="text-royal text-sm uppercase tracking-widest">Industrial Complex</div>
+          </div>
+          <div class="glass-card bg-white p-8 w-[400px] shadow-xl border-none">
+            <div class="flex text-amber-500 mb-4"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
+            <p class="text-indigo/80 italic mb-6">"Their automation solutions transformed our production efficiency. Highly recommended for complex projects."</p>
+            <div class="font-bold text-navy">Chief Engineer</div>
+            <div class="text-royal text-sm uppercase tracking-widest">Manufacturing Co.</div>
+          </div>
+          <div class="glass-card bg-white p-8 w-[400px] shadow-xl border-none">
+            <div class="flex text-amber-500 mb-4"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
+            <p class="text-indigo/80 italic mb-6">"The solar installation was seamless. We've seen a significant reduction in our energy costs."</p>
+            <div class="font-bold text-navy">Facility Director</div>
+            <div class="text-royal text-sm uppercase tracking-widest">Commercial Center</div>
+          </div>
+        </div>
+        <!-- Duplicate for loop -->
+        <div class="flex gap-12">
+          <div class="glass-card bg-white p-8 w-[400px] shadow-xl border-none">
+            <div class="flex text-amber-500 mb-4"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
+            <p class="text-indigo/80 italic mb-6">"Nexon provided exceptional service for our factory wiring. Their team is professional and highly skilled."</p>
+            <div class="font-bold text-navy">Operations Manager</div>
+            <div class="text-royal text-sm uppercase tracking-widest">Industrial Complex</div>
+          </div>
+          <div class="glass-card bg-white p-8 w-[400px] shadow-xl border-none">
+            <div class="flex text-amber-500 mb-4"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
+            <p class="text-indigo/80 italic mb-6">"Their automation solutions transformed our production efficiency. Highly recommended for complex projects."</p>
+            <div class="font-bold text-navy">Chief Engineer</div>
+            <div class="text-royal text-sm uppercase tracking-widest">Manufacturing Co.</div>
+          </div>
+          <div class="glass-card bg-white p-8 w-[400px] shadow-xl border-none">
+            <div class="flex text-amber-500 mb-4"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
+            <p class="text-indigo/80 italic mb-6">"The solar installation was seamless. We've seen a significant reduction in our energy costs."</p>
+            <div class="font-bold text-navy">Facility Director</div>
+            <div class="text-royal text-sm uppercase tracking-widest">Commercial Center</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ABOUT PREVIEW -->
-  <section id="about-preview" class="py-16 bg-gradient-to-b from-navy to-indigo">
+  <section id="about-preview" class="py-24 bg-pearl">
     <div class="container mx-auto px-6">
-      <div class="flex flex-col lg:flex-row items-center">
-        <div class="lg:w-1/2 mb-10 lg:mb-0 fade-in-left">
-          <h2 class="text-4xl font-bold text-pearl mb-6">About NEXON Engineering</h2>
-          <p class="text-frost mb-6 text-lg leading-relaxed">Nexon Engineering is a trusted provider of industrial repair, maintenance, and automation services. We specialize in machine servicing, industrial electrical work, and custom engineering solutions designed to improve productivity and reliability....</p>
-          <a href="about.html" class="inline-block mt-2 text-royal hover:underline">For more information →</a>
+      <div class="flex flex-col lg:flex-row items-center gap-16">
+        <div class="lg:w-1/2 fade-in-left">
+          <span class="text-royal font-bold tracking-[0.3em] uppercase text-xs mb-4 block">Introduction</span>
+          <h2 class="text-4xl md:text-5xl font-bold text-navy mb-8">About NEXON Engineering</h2>
+          <p class="text-indigo/80 mb-8 text-lg leading-relaxed">Nexon Engineering is a trusted provider of industrial repair, maintenance, and automation services. We specialize in machine servicing, industrial electrical work, and custom engineering solutions designed to improve productivity and reliability.</p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-royal/10 rounded-full flex items-center justify-center text-royal"><i data-feather="check"></i></div>
+              <span class="font-bold text-navy">Certified Engineers</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-royal/10 rounded-full flex items-center justify-center text-royal"><i data-feather="check"></i></div>
+              <span class="font-bold text-navy">Quality Assurance</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-royal/10 rounded-full flex items-center justify-center text-royal"><i data-feather="check"></i></div>
+              <span class="font-bold text-navy">24/7 Support</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-royal/10 rounded-full flex items-center justify-center text-royal"><i data-feather="check"></i></div>
+              <span class="font-bold text-navy">Global Standards</span>
+            </div>
+          </div>
+          
+          <a href="about.html" class="inline-flex items-center gap-2 px-8 py-3 bg-navy text-pearl rounded-full font-bold hover:bg-indigo transition-all">
+            Read More <i data-feather="arrow-right" class="w-4 h-4"></i>
+          </a>
         </div>
-        <div class="lg:w-1/2 fade-in-right">
-          <img src="https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_e9zrb2e9zrb2e9zr12.png" alt="about image" class="rounded-xl shadow-2xl border-4 border-royal/50 w-full" />
+        <div class="lg:w-1/2 fade-in-right relative">
+          <div class="absolute -top-10 -right-10 w-40 h-40 bg-royal/10 rounded-full blur-2xl"></div>
+          <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo/10 rounded-full blur-2xl"></div>
+          <img src="https://raw.githubusercontent.com/NexonEngineering/nexonengineering.github.io/refs/heads/main/Gemini_Generated_Image_e9zrb2e9zrb2e9zr12.png" alt="about image" class="rounded-3xl shadow-[0_30px_60px_rgba(0,0,0,0.2)] border-8 border-white w-full relative z-10" />
         </div>
       </div>
     </div>

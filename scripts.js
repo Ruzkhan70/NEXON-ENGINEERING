@@ -5,12 +5,34 @@ document.addEventListener("DOMContentLoaded", function() {
     feather.replace();
   }
 
+  // Start Visitor Tracking
+  if (typeof trackVisitors === "function") {
+    trackVisitors();
+  }
+
+  // Custom Cursor logic
+  const cursor = document.createElement("div");
+  cursor.className = "custom-cursor";
+  document.body.appendChild(cursor);
+
+  document.addEventListener("mousemove", (e) => {
+    cursor.style.left = e.clientX + "px";
+    cursor.style.top = e.clientY + "px";
+    cursor.style.opacity = "1";
+  });
+
+  document.querySelectorAll("a, button, .clickable").forEach(el => {
+    el.addEventListener("mouseenter", () => cursor.classList.add("active"));
+    el.addEventListener("mouseleave", () => cursor.classList.remove("active"));
+  });
+
   // Mobile menu toggle
   const mobileBtn = document.getElementById("mobile-btn");
   const mobileMenu = document.getElementById("mobile-menu");
   if (mobileBtn && mobileMenu) {
     mobileBtn.addEventListener("click", () => {
       mobileMenu.classList.toggle("hidden");
+      mobileMenu.classList.toggle("animate-slide-down");
     });
   }
 
@@ -46,19 +68,20 @@ document.addEventListener("DOMContentLoaded", function() {
   };
 
   const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
+    entries.forEach((entry, index) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add("show");
-        
-        // Trigger counter animation if it's a counter element
-        if (entry.target.classList.contains("counter")) {
-          animateCounter(entry.target);
-        }
+        // Staggered reveal
+        setTimeout(() => {
+          entry.target.classList.add("show");
+          if (entry.target.classList.contains("counter")) {
+            animateCounter(entry.target);
+          }
+        }, index * 100);
       }
     });
   }, observerOptions);
 
-  document.querySelectorAll(".fade-in-left, .fade-in-right, .fade-in-up, .service-card, .project-item, .counter")
+  document.querySelectorAll(".fade-in-left, .fade-in-right, .fade-in-up, .service-card, .project-item, .counter, .glass-card")
     .forEach(el => observer.observe(el));
 
   // Counter Animation
@@ -152,22 +175,24 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 
-  // Magnetic hover effect for cards
-  document.querySelectorAll(".magnetic-hover").forEach(card => {
+  // Magnetic/Tilt effect for elements with .tilt class
+  document.querySelectorAll(".tilt, .glass-card, .service-card").forEach(card => {
     card.addEventListener("mousemove", (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = (y - centerY) / 20;
-      const rotateY = (centerX - x) / 20;
+      const rotateX = (y - centerY) / 10; // More pronounced
+      const rotateY = (centerX - x) / 10;
       
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+      card.style.boxShadow = `${-rotateY * 2}px ${rotateX * 2}px 30px rgba(30, 136, 229, 0.3)`;
     });
     
     card.addEventListener("mouseleave", () => {
       card.style.transform = "perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)";
+      card.style.boxShadow = "none";
     });
   });
 
@@ -235,51 +260,25 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // Dynamic content sync from Admin JSON API
-  async function loadDynamicContent() {
-    try {
-      const [pagesRes, contentRes] = await Promise.all([
-        fetch('/api/pages/public'),
-        fetch('/api/content')
-      ]);
-      const pages = await pagesRes.json();
-      const content = await contentRes.json();
+  // Dynamic content sync from Firebase
+  function loadDynamicContent() {
+    syncWithFirebase('site', (site) => {
+      if (!site) return;
 
-      // Page visibility safeguard on direct route access
-      const path = window.location.pathname.split('/').pop() || 'index.html';
-      const pageMap = {
-        'index.html': 'home',
-        'about.html': 'about',
-        'services.html': 'services',
-        'projects.html': 'projects',
-        'our-clients.html': 'our-clients',
-        'contact.html': 'contact'
-      };
-      const currentPage = pageMap[path];
-      if (currentPage && currentPage !== 'home' && !pages[currentPage]?.visible) {
-        return window.location.href = '/';
-      }
+      // Hero
+      const heroTitle = document.getElementById('heroTitle');
+      if (heroTitle) heroTitle.textContent = site.heroTitle || 'Premier Engineering Solutions';
+      
+      const heroSubtitle = document.getElementById('heroSubtitle');
+      if (heroSubtitle) heroSubtitle.textContent = site.heroSubtitle || 'Innovating Industry Standards';
 
-      const home = content.home || {};
-      if (home.heroTitle) {
-        const el = document.getElementById('heroTitle');
-        if (el) el.textContent = home.heroTitle;
-      }
-      if (home.heroSubtitle) {
-        const el = document.getElementById('heroSubtitle');
-        if (el) el.textContent = home.heroSubtitle;
-      }
-      if (home.aboutPreview) {
-        const el = document.getElementById('aboutPreviewText');
-        if (el) el.textContent = home.aboutPreview;
-      }
-      if (home.stats) {
-        const stats = home.stats;
+      // Stats
+      if (site.stats) {
         const statsMap = {
-          statsProjects: stats.projectsDone,
-          statsClients: stats.industrialClients,
-          statsYears: stats.yearsExperience,
-          statsEmergency: stats.emergencySupport
+          statsProjects: site.stats.projects,
+          statsClients: site.stats.clients,
+          statsYears: site.stats.years,
+          statsEmergency: site.stats.support
         };
         for (const [id, value] of Object.entries(statsMap)) {
           const el = document.getElementById(id);
@@ -287,50 +286,22 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       }
 
-      const about = content.about || {};
-      if (about.whoWeAre) {
-        const el = document.getElementById('aboutWhoWeAreText');
-        if (el) el.textContent = about.whoWeAre.description || '';
-      }
-      if (about.mission) {
-        const el = document.getElementById('aboutMissionText');
-        if (el) el.textContent = about.mission.description || '';
-      }
-      if (about.vision) {
-        const el = document.getElementById('aboutVisionText');
-        if (el) el.textContent = about.vision.description || '';
-      }
+      // Contact Info
+      const emailText = document.getElementById('contactEmailText');
+      if (emailText) emailText.textContent = site.contact?.email;
 
-      const contactData = content.contact || {};
-      if (contactData.address) {
-        const el = document.getElementById('contactAddressText');
-        if (el) el.textContent = contactData.address;
-      }
-      if (contactData.email) {
-        const el = document.getElementById('contactEmailText');
-        if (el) el.textContent = contactData.email;
-      }
-      if (contactData.phone) {
-        const el = document.getElementById('contactPhoneText');
-        if (el) el.textContent = contactData.phone;
-      }
-      if (contactData.whatsapp) {
-        const el = document.getElementById('contactWhatsappText');
-        if (el) el.textContent = contactData.whatsapp;
-      }
+      const phoneText = document.getElementById('contactPhoneText');
+      if (phoneText) phoneText.textContent = site.contact?.phone;
 
-      const footer = content.footer || {};
-      if (footer.companyDescription) {
-        const el = document.getElementById('footerCompanyDescription');
-        if (el) el.textContent = footer.companyDescription;
-      }
-      if (footer.copyright) {
-        const el = document.getElementById('footerCopyright');
-        if (el) el.textContent = footer.copyright;
-      }
-    } catch (err) {
-      console.warn('Dynamic content sync failed:', err);
-    }
+      const addressText = document.getElementById('contactAddressText');
+      if (addressText) addressText.textContent = site.contact?.address;
+    });
+
+    // Sync Services
+    syncWithFirebase('services', (services) => {
+      if (!services) return;
+      // You can implement dynamic service card rendering here if needed
+    });
   }
 
   loadDynamicContent();
