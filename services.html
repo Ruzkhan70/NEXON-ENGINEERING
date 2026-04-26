@@ -50,7 +50,7 @@
     .nav-links a {
       position: relative;
       text-decoration: none;
-      color: #0A2463;
+      color: #F8F9FA;
     }
 
     .nav-links a::after {
@@ -159,18 +159,18 @@
   <div id="scroll-progress" class="scroll-progress" style="width: 0%"></div>
 
   <!-- NAVBAR -->
-  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-pearl/95 backdrop-blur-lg shadow-sm">
+  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-navy/95 backdrop-blur-lg shadow-sm">
     <div class="container mx-auto px-6 py-4 flex items-center justify-between">
       <a href="index.html" class="flex items-center group">
         <div class="logo">
           <img src="images/logo-small.png" alt="Nexon" class="h-12 transition-transform group-hover:scale-105" />
-          <span class="company-name text-xs lg:text-lg text-navy font-semibold ml-2">
+          <span class="company-name text-xs lg:text-lg text-pearl font-semibold ml-2">
             NEXON ENGINEERING SERVICES (PVT) LTD
           </span>
         </div>
       </a>
 
-      <div class="hidden md:flex space-x-8 text-navy font-medium nav-links" id="dynamic-nav">
+      <div class="hidden md:flex space-x-8 text-pearl font-medium nav-links" id="dynamic-nav">
         <a href="index.html" class="hover:text-royal">Home</a>
         <a href="about.html" class="hover:text-royal">About</a>
         <a href="services.html" class="text-royal">Services</a>
@@ -183,7 +183,7 @@
         Get Quote
       </a>
 
-      <button id="mobile-btn" class="md:hidden text-navy p-2">
+      <button id="mobile-btn" class="md:hidden text-pearl p-2">
         <i data-feather="menu"></i>
       </button>
     </div>
@@ -193,16 +193,16 @@
     </div>
   </nav>
 
-  <!-- Header -->
-  <section class="pt-36 pb-12 bg-gradient-to-b from-frost to-pearl text-center relative overflow-hidden">
-    <div class="absolute top-0 left-0 w-full h-full opacity-10">
-      <div class="absolute top-10 left-10 w-64 h-64 bg-royal/20 rounded-full blur-3xl"></div>
-      <div class="absolute bottom-10 right-10 w-80 h-80 bg-indigo/20 rounded-full blur-3xl"></div>
-    </div>
-    <div class="relative z-10">
-      <span class="inline-block px-4 py-1.5 bg-royal/10 text-royal rounded-full text-sm font-medium mb-4 fade-in-up">Our Expertise</span>
-      <h1 class="text-4xl md:text-5xl font-bold text-navy mb-4 fade-in-up">Our Services</h1>
-      <p class="text-indigo text-lg max-w-2xl mx-auto px-6 fade-in-up">Comprehensive engineering solutions for industrial, commercial, and residential needs</p>
+  <!-- Header - Premium Dark Theme -->
+  <section class="pt-36 pb-20 relative overflow-hidden" style="background: linear-gradient(135deg, #020917 0%, #0A2463 50%, #051937 100%);">
+    <div class="absolute top-10 right-20 w-80 h-80 rounded-full" style="background: #1E88E5; filter: blur(100px); opacity: 0.12;"></div>
+    <div class="absolute bottom-0 left-10 w-64 h-64 rounded-full" style="background: #00d4ff; filter: blur(80px); opacity: 0.10;"></div>
+    <div class="absolute top-1/2 left-1/3 w-48 h-48 rounded-full" style="background: #3E5C76; filter: blur(70px); opacity: 0.15;"></div>
+    <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.04) 1px, transparent 0); background-size: 32px 32px;"></div>
+    <div class="relative z-10 text-center">
+      <span class="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-5 fade-in-up" style="background: rgba(0,180,216,0.15); color: #00d4ff; border: 1px solid rgba(0,180,216,0.3);">Our Expertise</span>
+      <h1 class="text-4xl md:text-6xl font-bold mb-5 fade-in-up" style="background: linear-gradient(135deg, #ffffff, #00d4ff, #1E88E5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Our Services</h1>
+      <p class="text-lg max-w-2xl mx-auto px-6 fade-in-up" style="color: rgba(225,245,254,0.75);">Comprehensive engineering solutions for industrial, commercial, and residential needs</p>
     </div>
   </section>
 

@@ -37,6 +37,20 @@ function syncWithFirebase(path, callback) {
 }
 
 /**
+ * Write data to Firebase - for admin portal to sync changes
+ */
+function writeToFirebase(path, data) {
+  return db.ref(path).set(data);
+}
+
+/**
+ * Update specific path in Firebase
+ */
+function updateFirebase(path, data) {
+  return db.ref(path).update(data);
+}
+
+/**
  * Visitor Tracking logic
  */
 function trackVisitors() {
