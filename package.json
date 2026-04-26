@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "NEXON Engineering Services Website",
   "scripts": {
-    "build": "echo 'Static website - no build needed'",
-    "dev": "echo 'Static website - just serve index.html in browser'"
-  }
+    "build": "echo 'Static site - no build needed'"
+  },
+  "build": null,
+  "dev": null
+}
 }
