@@ -3,16 +3,27 @@
 function loadNavigation() {
     // Firebase Listener for Navigation
     syncWithFirebase('site/pages', (pagesData) => {
-        const pages = pagesData || [
-            { id: '1', slug: 'home', label: 'Home', visible: true },
-            { id: '2', slug: 'about', label: 'About', visible: true },
-            { id: '3', slug: 'services', label: 'Services', visible: true },
-            { id: '4', slug: 'projects', label: 'Projects', visible: true },
-            { id: '6', slug: 'our-clients', label: 'Our Clients', visible: true },
-            { id: '5', slug: 'contact', label: 'Contact', visible: true }
-        ];
+        let pagesArray = [];
+        if (pagesData && !Array.isArray(pagesData)) {
+            const order = ['home', 'about', 'services', 'projects', 'clients', 'contact'];
+            pagesArray = order.map(slug => ({
+                slug: slug === 'clients' ? 'our-clients' : slug,
+                label: slug === 'clients' ? 'Our Clients' : (pagesData[slug]?.title || slug.charAt(0).toUpperCase() + slug.slice(1)),
+                visible: pagesData[slug]?.visible !== false
+            }));
+        } else {
+            pagesArray = pagesData || [
+                { id: '1', slug: 'home', label: 'Home', visible: true },
+                { id: '2', slug: 'about', label: 'About', visible: true },
+                { id: '3', slug: 'services', label: 'Services', visible: true },
+                { id: '4', slug: 'projects', label: 'Projects', visible: true },
+                { id: '6', slug: 'our-clients', label: 'Our Clients', visible: true },
+                { id: '5', slug: 'contact', label: 'Contact', visible: true }
+            ];
+        }
 
         const navContainer = document.getElementById('dynamic-nav');
+
         const mobileNavContainer = document.getElementById('dynamic-mobile-nav');
 
         if (navContainer) navContainer.innerHTML = '';
@@ -26,7 +37,7 @@ function loadNavigation() {
             'contact': 'contact.html'
         };
 
-        pages.forEach(page => {
+        pagesArray.forEach(page => {
             if (page.visible && page.slug !== 'home') {
                 const currentPage = window.location.pathname.split('/').pop() || 'index.html';
                 const pageUrl = pageUrls[page.slug] || `${page.slug}.html`;

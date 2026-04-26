@@ -215,7 +215,188 @@
     </div>
   </section>
 
-  <!-- CORE SPECIALIZATIONS -->
+  <!-- OUR SERVICES CAROUSEL -->
+  <style>
+    .services-scroll-container {
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .services-scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+    .service-category-card {
+      min-width: 320px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .service-category-card:hover {
+      transform: translateY(-8px);
+    }
+    .services-wrapper {
+      display: flex;
+      gap: 24px;
+      padding: 20px 0;
+    }
+    .services-wrapper:hover {
+      animation-play-state: paused;
+    }
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .auto-scroll {
+      animation: scroll-left 30s linear infinite;
+    }
+    .auto-scroll:hover {
+      animation-play-state: paused;
+    }
+  </style>
+  
+  <section class="py-24 bg-navy relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-royal rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-12">
+        <span class="text-royal font-bold tracking-[0.3em] uppercase text-xs mb-4 block">Our Expertise</span>
+        <h2 class="text-4xl md:text-5xl font-bold text-pearl">Our Services</h2>
+      </div>
+      
+      <div class="marquee py-8">
+        <div class="marquee-content auto-scroll gap-8 px-8" style="width: max-content;">
+          <div class="flex gap-8">
+            <!-- Service Category 1 -->
+            <a href="services.html" class="service-category-card glass-card bg-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10 hover:bg-white/10 hover:border-royal/30 transition-all duration-500 cursor-pointer group" style="min-width: 320px;">
+              <div class="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i data-feather="zap" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-pearl mb-3">Electrical & Machinery</h3>
+              <p class="text-frost/60 mb-4">Industrial wiring, panel installations, machine repair and maintenance services.</p>
+              <span class="text-royal font-medium flex items-center gap-2">
+                Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </a>
+            
+            <!-- Service Category 2 -->
+            <a href="services.html" class="service-category-card glass-card bg-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10 hover:bg-white/10 hover:border-royal/30 transition-all duration-500 cursor-pointer group" style="min-width: 320px;">
+              <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i data-feather="cpu" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-pearl mb-3">Automation & Electronics</h3>
+              <p class="text-frost/60 mb-4">PLC programming, HMI design, and industrial automation solutions.</p>
+              <span class="text-royal font-medium flex items-center gap-2">
+                Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </a>
+            
+            <!-- Service Category 3 -->
+            <a href="services.html" class="service-category-card glass-card bg-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10 hover:bg-white/10 hover:border-royal/30 transition-all duration-500 cursor-pointer group" style="min-width: 320px;">
+              <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i data-feather="tool" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-pearl mb-3">Mechanical & Fabrications</h3>
+              <p class="text-frost/60 mb-4">Welding, machine part repairs, custom fabrication and conveyor systems.</p>
+              <span class="text-royal font-medium flex items-center gap-2">
+                Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </a>
+            
+            <!-- Service Category 4 -->
+            <a href="services.html" class="service-category-card glass-card bg-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10 hover:bg-white/10 hover:border-royal/30 transition-all duration-500 cursor-pointer group" style="min-width: 320px;">
+              <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i data-feather="briefcase" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-pearl mb-3">Industrial Support & Services</h3>
+              <p class="text-frost/60 mb-4">Factory setup, commissioning, preventive maintenance and technical support.</p>
+              <span class="text-royal font-medium flex items-center gap-2">
+                Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </a>
+            
+            <!-- Service Category 5 -->
+            <a href="services.html" class="service-category-card glass-card bg-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10 hover:bg-white/10 hover:border-royal/30 transition-all duration-500 cursor-pointer group" style="min-width: 320px;">
+              <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i data-feather="sun" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-pearl mb-3">Solar & Security Systems</h3>
+              <p class="text-frost/60 mb-4">Solar panel installation, CCTV setup and security system configuration.</p>
+              <span class="text-royal font-medium flex items-center gap-2">
+                Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </a>
+          </div>
+          
+          <!-- Duplicate for seamless loop -->
+          <div class="flex gap-8">
+            <!-- Service Category 1 -->
+            <a href="services.html" class="service-category-card glass-card bg-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10 hover:bg-white/10 hover:border-royal/30 transition-all duration-500 cursor-pointer group" style="min-width: 320px;">
+              <div class="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i data-feather="zap" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-pearl mb-3">Electrical & Machinery</h3>
+              <p class="text-frost/60 mb-4">Industrial wiring, panel installations, machine repair and maintenance services.</p>
+              <span class="text-royal font-medium flex items-center gap-2">
+                Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </a>
+            
+            <!-- Service Category 2 -->
+            <a href="services.html" class="service-category-card glass-card bg-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10 hover:bg-white/10 hover:border-royal/30 transition-all duration-500 cursor-pointer group" style="min-width: 320px;">
+              <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i data-feather="cpu" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-pearl mb-3">Automation & Electronics</h3>
+              <p class="text-frost/60 mb-4">PLC programming, HMI design, and industrial automation solutions.</p>
+              <span class="text-royal font-medium flex items-center gap-2">
+                Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </a>
+            
+            <!-- Service Category 3 -->
+            <a href="services.html" class="service-category-card glass-card bg-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10 hover:bg-white/10 hover:border-royal/30 transition-all duration-500 cursor-pointer group" style="min-width: 320px;">
+              <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i data-feather="tool" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-pearl mb-3">Mechanical & Fabrications</h3>
+              <p class="text-frost/60 mb-4">Welding, machine part repairs, custom fabrication and conveyor systems.</p>
+              <span class="text-royal font-medium flex items-center gap-2">
+                Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </a>
+            
+            <!-- Service Category 4 -->
+            <a href="services.html" class="service-category-card glass-card bg-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10 hover:bg-white/10 hover:border-royal/30 transition-all duration-500 cursor-pointer group" style="min-width: 320px;">
+              <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i data-feather="briefcase" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-pearl mb-3">Industrial Support & Services</h3>
+              <p class="text-frost/60 mb-4">Factory setup, commissioning, preventive maintenance and technical support.</p>
+              <span class="text-royal font-medium flex items-center gap-2">
+                Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </a>
+            
+            <!-- Service Category 5 -->
+            <a href="services.html" class="service-category-card glass-card bg-white/5 backdrop-blur-lg p-8 rounded-2xl border border-white/10 hover:bg-white/10 hover:border-royal/30 transition-all duration-500 cursor-pointer group" style="min-width: 320px;">
+              <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i data-feather="sun" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-pearl mb-3">Solar & Security Systems</h3>
+              <p class="text-frost/60 mb-4">Solar panel installation, CCTV setup and security system configuration.</p>
+              <span class="text-royal font-medium flex items-center gap-2">
+                Learn More <i data-feather="arrow-right" class="w-4 h-4"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE SPECIALIZATIONS (Legacy - keeping for reference, can be removed)
   <section class="py-24 bg-pearl relative">
     <div class="container mx-auto px-6">
       <div class="text-center mb-16">
@@ -224,7 +405,6 @@
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Card 1 -->
         <div class="glass-card bg-white p-10 group hover:bg-navy transition-all duration-500">
           <div class="w-16 h-16 bg-royal/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-royal transition-colors">
             <i data-feather="zap" class="w-8 h-8 text-royal group-hover:text-white"></i>
@@ -236,7 +416,6 @@
           </a>
         </div>
         
-        <!-- Card 2 -->
         <div class="glass-card bg-white p-10 group hover:bg-navy transition-all duration-500">
           <div class="w-16 h-16 bg-royal/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-royal transition-colors">
             <i data-feather="cpu" class="w-8 h-8 text-royal group-hover:text-white"></i>
@@ -248,7 +427,6 @@
           </a>
         </div>
         
-        <!-- Card 3 -->
         <div class="glass-card bg-white p-10 group hover:bg-navy transition-all duration-500">
           <div class="w-16 h-16 bg-royal/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-royal transition-colors">
             <i data-feather="sun" class="w-8 h-8 text-royal group-hover:text-white"></i>
@@ -262,6 +440,7 @@
       </div>
     </div>
   </section>
+  -->
 
   <!-- OUR PROCESS -->
   <section class="py-24 bg-navy text-pearl relative overflow-hidden">

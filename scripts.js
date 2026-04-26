@@ -243,43 +243,43 @@ document.addEventListener("DOMContentLoaded", function() {
       particlesJS("particles-js", {
         "particles": {
           "number": {
-            "value": 80,
-            "density": { "enable": true, "value_area": 800 }
+            "value": 100,
+            "density": { "enable": true, "value_area": 600 }
           },
           "color": { "value": "#ffffff" },
           "shape": { "type": "circle" },
           "opacity": { 
             "value": 1,
-            "random": false,
-            "anim": { "enable": false }
+            "random": true,
+            "anim": { "enable": true, "speed": 1, "opacity_min": 0.3 }
           },
-          "size": { "value": 4, "random": true },
+          "size": { "value": 3, "random": true },
           "line_linked": {
             "enable": true,
-            "distance": 140,
-            "color": "#ffffff",
-            "opacity": 0.6,
-            "width": 1.5
+            "distance": 120,
+            "color": "#8FC1FA",
+            "opacity": 0.8,
+            "width": 2
           },
           "move": {
             "enable": true,
-            "speed": 0.5,
+            "speed": 1.5,
             "direction": "none",
-            "random": true,
+            "random": false,
             "straight": false,
             "out_mode": "out",
-            "bounce": false
+            "bounce": true
           }
         },
         "interactivity": {
           "detect_on": "canvas",
           "events": {
-            "onhover": { "enable": true, "mode": "repulse" },
+            "onhover": { "enable": true, "mode": "grab" },
             "onclick": { "enable": true, "mode": "push" },
             "resize": true
           },
           "modes": {
-            "repulse": { "distance": 150, "duration": 0.5 },
+            "grab": { "distance": 140, "links": { "opacity": 1 } },
             "push": { "particles_nb": 4 }
           }
         },

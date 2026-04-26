@@ -836,9 +836,9 @@
     // Clients Tab
     function ClientsTab({ clients, setClients, showToast }) {
       const [modal, setModal] = useState(null);
-      const [form, setForm] = useState({ name: "", description: "", image: "" });
+      const [form, setForm] = useState({ name: "", description: "", image: "", link: "" });
 
-      const openAdd = () => { setForm({ name: "", description: "", image: "" }); setModal({ mode: "add" }); };
+      const openAdd = () => { setForm({ name: "", description: "", image: "", link: "" }); setModal({ mode: "add" }); };
       const openEdit = (c) => { setForm(c); setModal({ mode: "edit", id: c.id }); };
 
       const saveClient = () => {
@@ -853,7 +853,7 @@
       return (
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
-            <div><h1 className="section-title">Clients</h1><p className="section-sub">Manage your client portfolio and testimonials.</p></div>
+            <div><h1 className="section-title">Clients</h1><p className="section-sub">Manage your client portfolio and add website links.</p></div>
             <button className="btn-primary" onClick={openAdd}><Icon name="plus" size={14} /> Add Client</button>
           </div>
           <Card style={{ padding: 0, overflow: "hidden" }}>
@@ -884,6 +884,7 @@
             <Modal title={modal.mode === "add" ? "Add New Client" : "Edit Client"} onClose={() => setModal(null)}>
               <Field label="Client Name" value={form.name} onChange={v => setForm(f => ({ ...f, name: v }))} placeholder="e.g. Lanka Tiles PLC" />
               <Field label="Description" value={form.description} onChange={v => setForm(f => ({ ...f, description: v }))} rows={2} />
+              <Field label="Website Link (optional)" value={form.link} onChange={v => setForm(f => ({ ...f, link: v }))} placeholder="https://client-website.com" />
               <ImageUpload label="Client Logo / Image" value={form.image} onChange={v => setForm(f => ({ ...f, image: v }))} previewHeight={120} />
               <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
                 <button className="btn-primary" onClick={saveClient} style={{ flex: 1 }}>Save Client</button>
