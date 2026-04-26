@@ -1,8 +1,0 @@
-{
-  "name": "nexon-engineering",
-  "version": "1.0.0",
-  "description": "NEXON Engineering Services Website",
-  "scripts": {
-    "build": "echo 'Static site'"
-  }
-}
