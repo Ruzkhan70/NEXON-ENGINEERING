@@ -62,52 +62,69 @@ function loadNavigation() {
 }
 
 function loadSettings() {
+    // Try Firebase first, fallback to localStorage
     syncWithFirebase('site', (siteData) => {
-        if (!siteData) return;
-        
-        // Global settings from site object
-        const globals = {
-            companyName: siteData.companyName,
-            tagline: siteData.tagline,
-            email: siteData.email,
-            phone: siteData.phone,
-            whatsapp: siteData.whatsapp,
-            address: siteData.address,
-            facebook: siteData.facebook,
-            instagram: siteData.instagram,
-            linkedin: siteData.linkedin
-        };
-        
-        // Update global elements
-        document.querySelectorAll('[data-setting]').forEach(el => {
-            const key = el.getAttribute('data-setting');
-            // Check globals first
-            if (globals[key] !== undefined) {
-                el.textContent = globals[key];
-            }
-            // Check pages data
-            else if (siteData.pages) {
-                Object.keys(siteData.pages).forEach(page => {
-                    const pageData = siteData.pages[page];
-                    if (pageData && pageData[key] !== undefined) {
-                        el.textContent = pageData[key];
-                    }
-                });
-            }
-        });
-        
-        document.querySelectorAll('[data-setting-href]').forEach(el => {
-            const key = el.getAttribute('data-setting-href');
-            if (globals[key]) {
-                el.href = globals[key];
-            }
-        });
-        
-        // Update Title
-        if (siteData.companyName) {
-            document.title = siteData.companyName + (window.location.pathname.includes('index') ? ' — Home' : '');
+        if (siteData) {
+            localStorage.setItem('nexon_site', JSON.stringify(siteData));
+            applySiteSettings(siteData);
         }
     });
+    
+    // Also try loading from localStorage (fallback)
+    setTimeout(() => {
+        try {
+            const stored = localStorage.getItem('nexon_site');
+            if (stored) {
+                const siteData = JSON.parse(stored);
+                applySiteSettings(siteData);
+            }
+        } catch(e) {}
+    }, 1500);
+}
+
+function applySiteSettings(siteData) {
+    if (!siteData) return;
+    
+    // Global settings
+    const globals = {
+        companyName: siteData.companyName,
+        tagline: siteData.tagline,
+        email: siteData.email,
+        phone: siteData.phone,
+        whatsapp: siteData.whatsapp,
+        address: siteData.address,
+        facebook: siteData.facebook,
+        instagram: siteData.instagram,
+        linkedin: siteData.linkedin
+    };
+    
+    // Update elements with data-setting
+    document.querySelectorAll('[data-setting]').forEach(el => {
+        const key = el.getAttribute('data-setting');
+        if (globals[key]) {
+            el.textContent = globals[key];
+        }
+        else if (siteData.pages) {
+            Object.keys(siteData.pages).forEach(page => {
+                const pageData = siteData.pages[page];
+                if (pageData && pageData[key]) {
+                    el.textContent = pageData[key];
+                }
+            });
+        }
+    });
+    
+    document.querySelectorAll('[data-setting-href]').forEach(el => {
+        const key = el.getAttribute('data-setting-href');
+        if (globals[key]) {
+            el.href = globals[key];
+        }
+    });
+    
+    // Update Title
+    if (siteData.companyName) {
+        document.title = siteData.companyName + (window.location.pathname.includes('index') ? ' — Home' : '');
+    }
 }
 
 if (document.readyState === 'loading') {
