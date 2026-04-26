@@ -243,27 +243,27 @@ document.addEventListener("DOMContentLoaded", function() {
       particlesJS("particles-js", {
         "particles": {
           "number": {
-            "value": 150,
-            "density": { "enable": true, "value_area": 400 }
+            "value": 200,
+            "density": { "enable": true, "value_area": 300 }
           },
           "color": { "value": "#8FC1FA" },
           "shape": { "type": "circle" },
           "opacity": { 
             "value": 1,
             "random": true,
-            "anim": { "enable": true, "speed": 1, "opacity_min": 0.4 }
+            "anim": { "enable": true, "speed": 1, "opacity_min": 0.5 }
           },
-          "size": { "value": 3, "random": true },
+          "size": { "value": 2.5, "random": true },
           "line_linked": {
             "enable": true,
-            "distance": 100,
+            "distance": 80,
             "color": "#8FC1FA",
-            "opacity": 0.9,
+            "opacity": 1,
             "width": 1.5
           },
           "move": {
             "enable": true,
-            "speed": 2,
+            "speed": 2.5,
             "direction": "none",
             "random": true,
             "straight": false,
@@ -279,8 +279,8 @@ document.addEventListener("DOMContentLoaded", function() {
             "resize": true
           },
           "modes": {
-            "repulse": { "distance": 200, "duration": 0.5 },
-            "push": { "particles_nb": 6 }
+            "repulse": { "distance": 250, "duration": 0.6 },
+            "push": { "particles_nb": 8 }
           }
         },
         "retina_detect": true
