@@ -440,8 +440,8 @@
         }
       }
       
-      // Update location visibility
-      if (site.contact && site.contact.locationVisible === false) {
+      // Update location visibility - check both Firebase-synced and localStorage versions
+      if (site && site.contact && site.contact.locationVisible === false) {
         const mapSection = document.querySelector('.map-section');
         const addressSection = document.querySelector('.location-address');
         if (mapSection) mapSection.style.display = 'none';
@@ -460,6 +460,8 @@
     }
     
     // Run on load
+    syncWithFirebase('nexon_site', applyContactUpdates);
+    
     setTimeout(() => {
       try {
         const stored = localStorage.getItem('nexon_site');

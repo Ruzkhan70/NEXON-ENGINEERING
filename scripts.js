@@ -243,23 +243,23 @@ document.addEventListener("DOMContentLoaded", function() {
       particlesJS("particles-js", {
         "particles": {
           "number": {
-            "value": 80,
-            "density": { "enable": true, "value_area": 400 }
+            "value": 100,
+            "density": { "enable": true, "value_area": 350 }
           },
           "color": { "value": "#8FC1FA" },
           "shape": { "type": "circle" },
           "opacity": { 
-            "value": 1,
+            "value": 0.9,
             "random": true,
-            "anim": { "enable": true, "speed": 1, "opacity_min": 0.5 }
+            "anim": { "enable": true, "speed": 1, "opacity_min": 0.6 }
           },
-          "size": { "value": 2, "random": true },
+          "size": { "value": 3, "random": true },
           "line_linked": {
             "enable": true,
-            "distance": 80,
+            "distance": 120,
             "color": "#8FC1FA",
-            "opacity": 1,
-            "width": 1
+            "opacity": 0.8,
+            "width": 1.5
           },
           "move": {
             "enable": true,
