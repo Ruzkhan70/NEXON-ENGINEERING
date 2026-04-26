@@ -727,52 +727,105 @@ const [loading, setLoading] = useState(false);
     function PagesTab({ site, setSite, showToast }) {
       const [activePage, setActivePage] = useState("home");
       const pages = ["home", "about", "services", "projects", "clients", "contact"];
-      const pageData = site.pages[activePage];
+      const pageData = site.pages[activePage] || {};
 
       const update = (key, val) => {
         const updated = { ...site, pages: { ...site.pages, [activePage]: { ...pageData, [key]: val } } };
         setSite(updated);
       };
 
-      const savePage = () => { setSite(site); showToast(`${activePage.charAt(0).toUpperCase() + activePage.slice(1)} page saved!`); };
+      const savePage = () => { setSite({...site}); showToast(`${activePage.charAt(0).toUpperCase() + activePage.slice(1)} page saved!`); };
+
+      const Field = ({ label, value, onChange, rows = 2, placeholder = "" }) => (
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: "block", color: "#94a3b8", fontSize: 12, fontWeight: 600, marginBottom: 8, textTransform: "uppercase" }}>{label}</label>
+          <textarea value={value || ""} onChange={e => onChange(e.target.value)} rows={rows} placeholder={placeholder} style={{ width: "100%", background: "#0f172a", border: "1px solid #1e3a5f", borderRadius: 8, padding: "12px 14px", color: "#e2e8f0", fontSize: 14, resize: "vertical", outline: "none" }} />
+        </div>
+      );
 
       return (
         <div>
-          <h1 className="section-title">Page Management</h1>
-          <p className="section-sub">Edit content for each page and control visibility.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: 24 }}>
+          <h1 className="section-title">Page Content Editor</h1>
+          <p className="section-sub">Edit all text content for each page.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "180px 1fr", gap: 24 }}>
             <div>
-              <Card style={{ padding: 12 }}>
+              <Card style={{ padding: 12, position: "sticky", top: 20 }}>
                 {pages.map(p => (
-                  <button key={p} onClick={() => setActivePage(p)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", borderRadius: 8, background: activePage === p ? "rgba(0,180,216,0.15)" : "none", border: activePage === p ? "1px solid rgba(0,180,216,0.3)" : "1px solid transparent", color: activePage === p ? "#00b4d8" : "#94a3b8", fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 13, marginBottom: 4, textTransform: "capitalize" }}>
-                    {p}
-                    <span style={{ fontSize: 10, fontWeight: 700, background: site.pages[p].visible ? "rgba(52,211,153,0.15)" : "rgba(248,113,113,0.1)", color: site.pages[p].visible ? "#34d399" : "#f87171", padding: "2px 7px", borderRadius: 20 }}>{site.pages[p].visible ? "ON" : "OFF"}</span>
+                  <button key={p} onClick={() => setActivePage(p)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: 8, background: activePage === p ? "rgba(0,180,216,0.15)" : "none", border: activePage === p ? "1px solid rgba(0,180,216,0.3)" : "1px solid transparent", color: activePage === p ? "#00b4d8" : "#94a3b8", fontFamily: "'DM Sans',sans-serif", fontWeight: 600, fontSize: 13, marginBottom: 4, textTransform: "capitalize", cursor: "pointer" }}>
+                    {p === 'clients' ? 'Our Clients' : p}
+                    <span style={{ fontSize: 10, fontWeight: 700, background: site.pages[p]?.visible ? "rgba(52,211,153,0.15)" : "rgba(248,113,113,0.1)", color: site.pages[p]?.visible ? "#34d399" : "#f87171", padding: "2px 7px", borderRadius: 20 }}>{site.pages[p]?.visible ? "ON" : "OFF"}</span>
                   </button>
                 ))}
               </Card>
             </div>
             <Card>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
-                <h3 style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 18, textTransform: "capitalize" }}>{activePage} Page</h3>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28, borderBottom: "1px solid #1e3a5f", paddingBottom: 16 }}>
+                <h3 style={{ color: "#e2e8f0", fontWeight: 700, fontSize: 18, textTransform: "capitalize" }}>{activePage === 'clients' ? 'Our Clients' : activePage} Page</h3>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <Toggle checked={pageData.visible} onChange={() => update("visible", !pageData.visible)} label={pageData.visible ? "Visible" : "Hidden"} />
-                  <button className="btn-primary" onClick={savePage}><Icon name="save" size={14} style={{ display: "inline", marginRight: 6 }} /> Save</button>
+                  <Toggle checked={pageData.visible !== false} onChange={() => update("visible", pageData.visible === false)} label={pageData.visible !== false ? "Visible" : "Hidden"} />
+                  <button className="btn-primary" onClick={savePage}><Icon name="save" size={14} style={{ display: "inline", marginRight: 6 }} /> Save Page</button>
                 </div>
               </div>
-              <Field label="Page Title" value={pageData.title || ""} onChange={v => update("title", v)} />
-              <Field label="Page Description" value={pageData.description || ""} onChange={v => update("description", v)} rows={4} />
-              {pageData.image !== undefined && <ImageUpload label="Page Image" value={pageData.image || ""} onChange={v => update("image", v)} previewHeight={140} />}
+
+              {/* HOME PAGE */}
               {activePage === "home" && <>
-                <Field label="Hero Title" value={pageData.heroTitle || ""} onChange={v => update("heroTitle", v)} />
-                <Field label="Hero Subtitle" value={pageData.heroSubtitle || ""} onChange={v => update("heroSubtitle", v)} rows={2} />
-                <ImageUpload label="Hero Image" value={pageData.heroImage || ""} onChange={v => update("heroImage", v)} previewHeight={160} />
-                <Field label="About Section Title" value={pageData.aboutTitle || ""} onChange={v => update("aboutTitle", v)} />
-                <Field label="About Section Text" value={pageData.aboutText || ""} onChange={v => update("aboutText", v)} rows={4} />
-                <ImageUpload label="About Section Image" value={pageData.aboutImage || ""} onChange={v => update("aboutImage", v)} previewHeight={140} />
+                <h4 style={{ color: "#00b4d8", fontSize: 14, fontWeight: 700, marginBottom: 16, marginTop: 24 }}>Hero Section</h4>
+                <Field label="Main Title" value={pageData.heroTitle} onChange={v => update("heroTitle", v)} placeholder="Engineering Innovation with Precision" />
+                <Field label="Subtitle" value={pageData.heroSubtitle} onChange={v => update("heroSubtitle", v)} rows={2} placeholder="Industrial repair, maintenance, and automation solutions..." />
+                <Field label="Button 1 Text" value={pageData.heroBtn1} onChange={v => update("heroBtn1", v)} placeholder="Explore Services" />
+                <Field label="Button 2 Text" value={pageData.heroBtn2} onChange={v => update("heroBtn2", v)} placeholder="Get a Quote" />
+                
+                <h4 style={{ color: "#00b4d8", fontSize: 14, fontWeight: 700, marginBottom: 16, marginTop: 24 }}>Statistics</h4>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <Field label="Projects Done" value={pageData.statsProjects} onChange={v => update("statsProjects", v)} placeholder="50+" />
+                  <Field label="Industrial Clients" value={pageData.statsClients} onChange={v => update("statsClients", v)} placeholder="30+" />
+                  <Field label="Years Experience" value={pageData.statsYears} onChange={v => update("statsYears", v)} placeholder="8+" />
+                  <Field label="Support" value={pageData.statsSupport} onChange={v => update("statsSupport", v)} placeholder="24/7" />
+                </div>
+
+                <h4 style={{ color: "#00b4d8", fontSize: 14, fontWeight: 700, marginBottom: 16, marginTop: 24 }}>About Section</h4>
+                <Field label="Section Title" value={pageData.aboutTitle} onChange={v => update("aboutTitle", v)} placeholder="About NEXON Engineering" />
+                <Field label="Section Text" value={pageData.aboutText} onChange={v => update("aboutText", v)} rows={4} placeholder="Nexon Engineering is..." />
+                
+                <h4 style={{ color: "#00b4d8", fontSize: 14, fontWeight: 700, marginBottom: 16, marginTop: 24 }}>Footer</h4>
+                <Field label="Company Name (Footer)" value={pageData.footerCompany} onChange={v => update("footerCompany", v)} placeholder="NEXON Engineering Services (Pvt) Ltd" />
+                <Field label="Copyright Text" value={pageData.footerCopyright} onChange={v => update("footerCopyright", v)} placeholder="© 2025 NEXON Engineering..." />
               </>}
+
+              {/* ABOUT PAGE */}
               {activePage === "about" && <>
-                <Field label="Mission Statement" value={pageData.mission || ""} onChange={v => update("mission", v)} rows={3} />
-                <Field label="Vision Statement" value={pageData.vision || ""} onChange={v => update("vision", v)} rows={3} />
+                <Field label="Page Title" value={pageData.title} onChange={v => update("title", v)} placeholder="About Us" />
+                <Field label="Page Subtitle" value={pageData.subtitle} onChange={v => update("subtitle", v)} rows={2} placeholder="Engineering Innovation With Precision..." />
+                <Field label="Mission Statement" value={pageData.mission} onChange={v => update("mission", v)} rows={3} placeholder="Our mission is..." />
+                <Field label="Vision Statement" value={pageData.vision} onChange={v => update("vision", v)} rows={3} placeholder="Our vision is..." />
+                <Field label="Who We Are Text" value={pageData.whoWeAre} onChange={v => update("whoWeAre", v)} rows={4} placeholder="Nexon Engineering is..." />
+              </>}
+
+              {/* SERVICES PAGE */}
+              {activePage === "services" && <>
+                <Field label="Page Title" value={pageData.title} onChange={v => update("title", v)} placeholder="Our Services" />
+                <Field label="Page Subtitle" value={pageData.subtitle} onChange={v => update("subtitle", v)} rows={2} placeholder="Comprehensive engineering solutions..." />
+              </>}
+
+              {/* PROJECTS PAGE */}
+              {activePage === "projects" && <>
+                <Field label="Page Title" value={pageData.title} onChange={v => update("title", v)} placeholder="Our Projects" />
+                <Field label="Page Subtitle" value={pageData.subtitle} onChange={v => update("subtitle", v)} rows={2} placeholder="Real-world engineering solutions..." />
+              </>}
+
+              {/* CLIENTS PAGE */}
+              {activePage === "clients" && <>
+                <Field label="Page Title" value={pageData.title} onChange={v => update("title", v)} placeholder="Our Clients" />
+                <Field label="Page Subtitle" value={pageData.subtitle} onChange={v => update("subtitle", v)} rows={2} placeholder="Trusted by leading industries..." />
+              </>}
+
+              {/* CONTACT PAGE */}
+              {activePage === "contact" && <>
+                <Field label="Page Title" value={pageData.title} onChange={v => update("title", v)} placeholder="Contact Us" />
+                <Field label="Page Subtitle" value={pageData.subtitle} onChange={v => update("subtitle", v)} rows={2} placeholder="We're here to assist you..." />
+                <Field label="Phone Number" value={pageData.phone} onChange={v => update("phone", v)} placeholder="+94 77 375 3621" />
+                <Field label="Email Address" value={pageData.email} onChange={v => update("email", v)} placeholder="nexonengineering.service@gmail.com" />
+                <Field label="Address" value={pageData.address} onChange={v => update("address", v)} placeholder="Colombo, Sri Lanka" />
               </>}
             </Card>
           </div>
