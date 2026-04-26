@@ -1,16 +1,9 @@
 {
   "name": "nexon-engineering",
   "version": "1.0.0",
-  "description": "NEXON Engineering Services Website with Admin Dashboard",
+  "description": "NEXON Engineering Services Website",
   "scripts": {
-    "server": "cd server && node index.js",
-    "client": "cd client && npm run dev",
-    "build": "cd client && npm run build",
-    "dev": "npm run build && concurrently \"npm run server\" \"npm run client\"",
-    "start": "npm run build && npm run server",
-    "install:all": "npm install && cd server && npm install && cd ../client && npm install"
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
+    "build": "echo 'Static website - no build needed'",
+    "dev": "echo 'Static website - just serve index.html in browser'"
   }
 }
